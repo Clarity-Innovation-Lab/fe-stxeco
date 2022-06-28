@@ -1,0 +1,155 @@
+@import 'my_variables.scss';
+
+@import 'node_modules/bootstrap/scss/bootstrap.scss';
+@import 'node_modules/bootstrap-vue/src/index.scss';
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-size: 1.1rem;
+  background: #fff;
+}
+
+h1, .h1 {
+  font-size: 2.2rem !important;
+  font-weight: 500;
+}
+
+.wrapper {
+  min-height: 100%;
+
+  /* Equal to height of footer */
+  /* But also accounting for potential margin-bottom of last child */
+  margin-bottom: -30px;
+}
+.footer,
+.push {
+  height: 30px;
+}
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%
+}
+
+#nav {
+  padding: 30px;
+
+  a {
+    font-weight: bold;
+  }
+}
+
+a:hover {
+  color: $info;
+  text-decoration: none;
+}
+
+.icon {
+    width: auto;
+    height: 1.1rem;
+  }
+  
+  .nav-pills .nav-link.active {
+    background-color: #b1b1af;
+  }
+  
+  /** ---- Notification styles ------------------------------------------------------ **/
+.vue-notification-template {
+  background: none;
+}
+.r-notifs {
+  padding: 7px 5px !important;
+  margin: 1px 1px 0px 1px !important;
+  font-size: 1.0rem !important;
+  background: $light !important;
+  color: #fff !important;
+}
+.success {
+  background: $success !important;
+}
+.error {
+  background: $danger !important;
+}
+.danger {
+  background: $danger !important;
+}
+.warning {
+  background: $warning !important;
+}
+/** ---------------------------------------------------------- **/
+
+
+
+.text-small {
+  font-size: 0.8rem;
+}
+.text-xsmall {
+  font-size: 0.7rem;
+}
+.pointer {
+  cursor: pointer;
+}
+.text-underline {
+  text-decoration: underline;
+}
+.text-bold {
+  font-weight: 700;
+}
+
+::placeholder {
+  color: #ccc !important;
+  font-weight: 500 !important;
+}
+
+.fake-input input {
+  color: white!important;
+}
+.fake-input {
+  min-width: 400px;
+  position: absolute;
+  top: -2000px;
+  background-color: $white;
+  border: white;
+  color: white!important;
+  letter-spacing: 0.1rem;
+}
+.fake-input:focus {
+  border: $white;
+  color: $white;
+}
+.fake-input:focus-visible {
+  border: none;
+  color: $white;
+}
+
+.card-group {
+  border: 0pt solid #fff !important;
+}
+.card {
+  border: none !important;
+}
+.card-footer {
+  background-color: #fff !important;
+}
+.home-card  {
+  min-height: 420px;
+  max-height: 420px;
+}
+.source-code {
+  background: $dark;
+  border: 2pt solid $dark;
+  color: $white;
+  padding: 25px;
+}
+
+.preview {
+  border: 1pt solid #333;
+  border-radius: 5px;
+  padding: 20px;
+}
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+}
