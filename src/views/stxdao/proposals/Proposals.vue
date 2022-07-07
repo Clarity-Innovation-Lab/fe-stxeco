@@ -1,42 +1,91 @@
 <template>
-<section v-if="loaded">
-  <b-container class="my-5">
-    <b-row class="mb-5 text-center">
-      <b-col cols="12">
-        <ProposalFilters />
-      </b-col>
-    </b-row>
-    <b-row class="my-2 text-left">
-      <b-col cols="12">
-        <b-table striped hover :items="values()" :fields="fields()" class="">
-          <template #cell(Proposal)="data">
-            <b-link class="text-info" variant="warning" v-on:click="openProposal(data)" v-html="data.value"></b-link>
-          </template>
-          <template #cell(Status)="data">
-            <b-link class="text-info pointer" v-b-tooltip.hover="{ variant: 'dark' }" :title="getStatusTip(data.value)">{{data.value}}</b-link>
-          </template>
-          <!--
+  <section v-if="loaded">
+    <b-container class="my-5">
+      <b-row class="mb-5 text-center">
+        <b-col cols="12">
+          <ProposalFilters />
+        </b-col>
+      </b-row>
+      <b-row class="my-2 text-left">
+        <b-col cols="12">
+          <b-table
+            striped
+            hover
+            :items="values()"
+            :fields="fields()"
+            class=""
+          >
+            <template #cell(Proposal)="data">
+              <b-link
+                class="text-info"
+                variant="warning"
+                @click="openProposal(data)"
+                v-html="data.value"
+              />
+            </template>
+            <template #cell(Status)="data">
+              <b-link
+                v-b-tooltip.hover="{ variant: 'dark' }"
+                class="text-info pointer"
+                :title="getStatusTip(data.value)"
+              >
+                {{ data.value }}
+              </b-link>
+            </template>
+            <!--
           <template #cell(Proposer)="data">
             <OwnerInfo :owner="data.value" />
           </template>
           -->
-          <template #cell(Actions)="data">
-            <b-link v-if="canEditProposal(data)" class="mr-2 text-info" variant="warning" v-on:click="editProposal(data)"><span>update</span></b-link>
-            <b-link v-else-if="!isSubmitted(data)" class="mr-2 text-info" variant="warning" v-on:click="editProposal(data)"><span>open</span></b-link>
-            <b-link v-if="canSubmitProposal(data)" class="mr-2 text-info" variant="warning" v-on:click="submitProposal(data)">submit</b-link>
-            <b-link v-if="isSubmitted(data)" class="mr-2 text-info" variant="warning" v-on:click="openProposal(data)">{{getStatusMessage(data)}}</b-link>
-          </template>
-        </b-table>
-      </b-col>
-    </b-row>
-  </b-container>
-</section>
-<section v-else-if="!loaded && !proposals">
-  <b-container class="my-5">No proposal found..</b-container>
-</section>
-<section v-else>
-  <b-container class="my-5">Querying blockchain for proposals..</b-container>
-</section>
+            <template #cell(Actions)="data">
+              <b-link
+                v-if="canEditProposal(data)"
+                class="mr-2 text-info"
+                variant="warning"
+                @click="editProposal(data)"
+              >
+                <span>update</span>
+              </b-link>
+              <b-link
+                v-else-if="!isSubmitted(data)"
+                class="mr-2 text-info"
+                variant="warning"
+                @click="editProposal(data)"
+              >
+                <span>open</span>
+              </b-link>
+              <b-link
+                v-if="canSubmitProposal(data)"
+                class="mr-2 text-info"
+                variant="warning"
+                @click="submitProposal(data)"
+              >
+                submit
+              </b-link>
+              <b-link
+                v-if="isSubmitted(data)"
+                class="mr-2 text-info"
+                variant="warning"
+                @click="openProposal(data)"
+              >
+                {{ getStatusMessage(data) }}
+              </b-link>
+            </template>
+          </b-table>
+        </b-col>
+      </b-row>
+    </b-container>
+  </section>
+  <section v-else-if="!loaded && !proposals">
+    <b-container class="my-5">
+      No proposal found..
+    </b-container>
+  </section>
+  <section v-else>
+    <b-container class="my-5">
+      Querying blockchain for proposals..
+    </b-container>
+  </section>
 </template>
 
 <script>
@@ -55,6 +104,22 @@ export default {
     return {
       proposalFlowId: process.env.VUE_APP_DAO_PROPOSAL_FLOW_ID,
       loaded: false
+    }
+  },
+  computed: {
+    canPropose () {
+      return this.$store.getters[APP_CONSTANTS.KEY_GOV_CAN_PROPOSE]
+    },
+    proposals () {
+      const proposals = this.$store.getters[APP_CONSTANTS.KEY_PROPOSALS]
+      return proposals
+    },
+    profile () {
+      const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]
+      return profile
+    },
+    stacksTipHeight () {
+      return this.$store.getters[APP_CONSTANTS.KEY_PROPOSAL_STACKS_TIP_HEIGHT]
     }
   },
   mounted () {
@@ -160,22 +225,6 @@ export default {
     },
     canEdit (proposal) {
       return this.profile.stxAddress === proposal.proposer && proposal.status === 'draft'
-    }
-  },
-  computed: {
-    canPropose () {
-      return this.$store.getters[APP_CONSTANTS.KEY_GOV_CAN_PROPOSE]
-    },
-    proposals () {
-      const proposals = this.$store.getters[APP_CONSTANTS.KEY_PROPOSALS]
-      return proposals
-    },
-    profile () {
-      const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]
-      return profile
-    },
-    stacksTipHeight () {
-      return this.$store.getters[APP_CONSTANTS.KEY_PROPOSAL_STACKS_TIP_HEIGHT]
     }
   }
 }

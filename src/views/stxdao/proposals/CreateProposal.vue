@@ -1,31 +1,37 @@
 <template>
-<b-container class="">
-  <b-row class="my-4">
-    <b-col align-self="start">
-      <h2><span>Something to Propose?</span></h2>
-      <ol>
-        <li>Deploy a proposal contract</li>
-        <li>Enter supporting information</li>
-      </ol>
-      <div>
-        <b-tabs card justified>
-          <b-tab>
-            <template #title>
-              <span class="text-bold">Deploy Proposal</span>
-            </template>
-            <DeployProposalForm :proposal="proposal"/>
-          </b-tab>
-          <b-tab active v-if="step2">
-            <template #title>
-              <span>Update Proposal</span>
-            </template>
-            <ProposalForm :proposal="proposal"/>
-          </b-tab>
-        </b-tabs>
-      </div>
-    </b-col>
-  </b-row>
-</b-container>
+  <b-container class="">
+    <b-row class="my-4">
+      <b-col align-self="start">
+        <h2><span>Something to Propose?</span></h2>
+        <ol>
+          <li>Deploy a proposal contract</li>
+          <li>Enter supporting information</li>
+        </ol>
+        <div>
+          <b-tabs
+            card
+            justified
+          >
+            <b-tab>
+              <template #title>
+                <span class="text-bold">Deploy Proposal</span>
+              </template>
+              <DeployProposalForm :template-proposal="proposal" />
+            </b-tab>
+            <b-tab
+              v-if="step2"
+              active
+            >
+              <template #title>
+                <span>Update Proposal</span>
+              </template>
+              <ProposalForm :template-proposal="proposal" />
+            </b-tab>
+          </b-tabs>
+        </div>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
@@ -49,16 +55,16 @@ export default {
       }
     }
   },
-  mounted () {
-    this.proposal.proposer = this.profile.stxAddress
-  },
-  methods: {
-  },
   computed: {
     profile () {
       const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]
       return profile
     }
+  },
+  mounted () {
+    this.proposal.proposer = this.profile.stxAddress
+  },
+  methods: {
   }
 }
 </script>

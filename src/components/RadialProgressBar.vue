@@ -1,12 +1,14 @@
 <template>
-<div class="hello">
-  <radial-progress-bar :diameter="200"
-                       :completed-steps="100"
-                       :total-steps="200">
-   <p>Block: {{ total }}</p>
-   <p>{{msg}}: {{ completed - total }}</p>
-  </radial-progress-bar>
-</div>
+  <div class="hello">
+    <radial-progress-bar
+      :diameter="200"
+      :completed-steps="100"
+      :total-steps="200"
+    >
+      <p>Block: {{ total }}</p>
+      <p>{{ msg }}: {{ completed - total }}</p>
+    </radial-progress-bar>
+  </div>
 </template>
 
 <script>

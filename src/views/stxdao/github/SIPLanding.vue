@@ -1,31 +1,71 @@
 <template>
-<section>
-  <b-container class="my-5">
-    <b-row>
-      <b-col>
-        <h1>SIP: Stacks Improvement Proposals</h1>
-        <p>Suggestion for the content here</p>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col md="6" sm="6" class="my-2">
-        <StxEcoDisplayCard :cardContent="votingCard" :path="'/stxdao/sip-voting'" label="More About Voting" />
-      </b-col>
-      <b-col md="6" sm="6" class="my-2">
-        <StxEcoDisplayCard :cardContent="cabsCard" :path="'/stxdao/sip-cabs'" label="About the CABs" />
-      </b-col>
-      <b-col md="6" sm="6" class="my-2">
-        <StxEcoDisplayCard :cardContent="suggestionsCard" :path="'/stxdao/sip-issues'" label="Make a Suggestion?" />
-      </b-col>
-      <b-col md="6" sm="6" class="my-2">
-        <StxEcoDisplayCard :cardContent="proposalsCard" :path="'/stxdao/sip-issues?filter=pulls'" label="SIP Proposals" />
-      </b-col>
-      <b-col md="6" sm="6" class="my-2">
-        <StxEcoDisplayCard :cardContent="processCard" :path="'/stxdao/sip-process'" label="Read More.." />
-      </b-col>
-    </b-row>
-  </b-container>
-</section>
+  <section>
+    <b-container class="my-5">
+      <b-row>
+        <b-col>
+          <h1>SIP: Stacks Improvement Proposals</h1>
+          <p>Suggestion for the content here</p>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col
+          md="6"
+          sm="6"
+          class="my-2"
+        >
+          <StxEcoDisplayCard
+            :card-content="votingCard"
+            :path="'/stxdao/sip-voting'"
+            label="More About Voting"
+          />
+        </b-col>
+        <b-col
+          md="6"
+          sm="6"
+          class="my-2"
+        >
+          <StxEcoDisplayCard
+            :card-content="cabsCard"
+            :path="'/stxdao/sip-cabs'"
+            label="About the CABs"
+          />
+        </b-col>
+        <b-col
+          md="6"
+          sm="6"
+          class="my-2"
+        >
+          <StxEcoDisplayCard
+            :card-content="suggestionsCard"
+            :path="'/stxdao/sip-issues'"
+            label="Make a Suggestion?"
+          />
+        </b-col>
+        <b-col
+          md="6"
+          sm="6"
+          class="my-2"
+        >
+          <StxEcoDisplayCard
+            :card-content="proposalsCard"
+            :path="'/stxdao/sip-issues?filter=pulls'"
+            label="SIP Proposals"
+          />
+        </b-col>
+        <b-col
+          md="6"
+          sm="6"
+          class="my-2"
+        >
+          <StxEcoDisplayCard
+            :card-content="processCard"
+            :path="'/stxdao/sip-process'"
+            label="Read More.."
+          />
+        </b-col>
+      </b-row>
+    </b-container>
+  </section>
 </template>
 
 <script>
@@ -79,11 +119,11 @@ export default {
                       '</ol>'
     }
   },
+  computed: {
+  },
   mounted () {
   },
   methods: {
-  },
-  computed: {
   }
 }
 </script>

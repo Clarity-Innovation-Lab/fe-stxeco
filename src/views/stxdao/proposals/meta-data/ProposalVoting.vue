@@ -1,14 +1,17 @@
 <template>
-<div v-if="proposal">
-  <b-container class="my-5">
-    <div class="d-flex justify-content-around">
-      <div class="text-center"><h2>Votes for:<br/>{{votesFor}}</h2></div>
-      <div class="text-center"><h2>Votes against:<br/>{{votesAgainst}}</h2></div>
-    </div>
-  </b-container>
-  <b-container class="my-5">
-  </b-container>
-</div>
+  <div v-if="proposal">
+    <b-container class="my-5">
+      <div class="d-flex justify-content-around">
+        <div class="text-center">
+          <h2>Votes for:<br>{{ votesFor }}</h2>
+        </div>
+        <div class="text-center">
+          <h2>Votes against:<br>{{ votesAgainst }}</h2>
+        </div>
+      </div>
+    </b-container>
+    <b-container class="my-5" />
+  </div>
 </template>
 
 <script>
@@ -23,10 +26,6 @@ export default {
     return {
     }
   },
-  mounted () {
-  },
-  methods: {
-  },
   computed: {
     votesFor () {
       const propData = this.proposal.proposalData
@@ -40,6 +39,10 @@ export default {
       const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]
       return profile
     }
+  },
+  mounted () {
+  },
+  methods: {
   }
 }
 </script>

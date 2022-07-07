@@ -1,48 +1,82 @@
 <template>
-<div>
+  <div>
     <b-form>
-        <div>
-          <div v-if="!uploadable">
-              <MediaUpload class="text-center" :hideLinkPaste="hideLinkPaste" :myUploadId="'coverImage'" :dims="dims" :contentModel="contentModel" :mediaFiles="mediaFilesImage()" :limit="1" :sizeLimit="3" :mediaTypes="'code/clar'" @updateMedia="updateMedia($event)"/>
+      <div>
+        <div v-if="!uploadable">
+          <MediaUpload
+            class="text-center"
+            :hide-link-paste="hideLinkPaste"
+            :my-upload-id="'coverImage'"
+            :dims="dims"
+            :content-model="contentModel"
+            :media-files="mediaFilesImage()"
+            :limit="1"
+            :size-limit="3"
+            :media-types="'code/clar'"
+            @updateMedia="updateMedia($event)"
+          />
+        </div>
+        <div v-else>
+          <div
+            class="mb-3"
+            role="group"
+          >
+            <label for="contractId"><span class="text-danger">*</span> contract id</label>
+            <b-form-input
+              id="contractId"
+              v-model="fileName"
+              placeholder="contract id"
+              trim
+              required
+            />
           </div>
-          <div v-else>
-            <div class="mb-3" role="group">
-              <label for="contractId"><span class="text-danger">*</span> contract id</label>
-              <b-form-input
-                id="contractId"
-                v-model="fileName"
-                placeholder="contract id"
-                trim
-                required
-              ></b-form-input>
+          <div>
+            <div class="mb-3">
+              <b-textarea
+                ref="contractCode"
+                :value="decodedString"
+                class="text-small py-4 my-3 source-code"
+                rows="10"
+                placeholder="Contract Code"
+              />
             </div>
-            <div>
-              <div class="mb-3">
-                <b-textarea
-                  ref="contractCode"
-                  :value="decodedString"
-                  class="text-small py-4 my-3 source-code"
-                  rows="10"
-                  placeholder="Contract Code"
-                ></b-textarea>
-              </div>
-              <div class="mt-3 d-flex justify-content-start">
-                <b-button class="mr-3" @click="deployContract()">Deploy</b-button>
-                <b-button variant="outline-dark" class="text-dark " @click="cancelUpload()">Cancel</b-button>
-              </div>
+            <div class="mt-3 d-flex justify-content-start">
+              <b-button
+                class="mr-3"
+                @click="deployContract()"
+              >
+                Deploy
+              </b-button>
+              <b-button
+                variant="outline-dark"
+                class="text-dark "
+                @click="cancelUpload()"
+              >
+                Cancel
+              </b-button>
             </div>
           </div>
         </div>
-    </b-form>
-    <pre v-if="result" class="source-code my-4" v-html="result"></pre>
-  <b-modal id="modal-err" title="Contract Not Deployed">
-    <div class="row">
-      <div class="col-12 my-1">
-        <div class="mb-3">Error: {{result}}</div>
       </div>
-    </div>
-  </b-modal>
-</div>
+    </b-form>
+    <pre
+      v-if="result"
+      class="source-code my-4"
+      v-html="result"
+    />
+    <b-modal
+      id="modal-err"
+      title="Contract Not Deployed"
+    >
+      <div class="row">
+        <div class="col-12 my-1">
+          <div class="mb-3">
+            Error: {{ result }}
+          </div>
+        </div>
+      </div>
+    </b-modal>
+  </div>
 </template>
 
 <script>
@@ -55,8 +89,6 @@ export default {
   name: 'DeployContractFromFile',
   components: {
     MediaUpload
-  },
-  watch: {
   },
   data () {
     return {
@@ -82,6 +114,30 @@ export default {
       uploadable: false,
       files: []
     }
+  },
+  computed: {
+    mediaFiles1 () {
+      let files = []
+      if (this.files.length > 0) {
+        files = this.files
+      }
+      return files
+    },
+    decodedString () {
+      if (this.files.length === 0) {
+        return
+      }
+      const sub = 'data:application/octet-stream;base64,'
+      const octets = this.files[0].dataUrl.substring(sub.length)
+      const decodedString = atob(octets)
+      return decodedString
+    },
+    profile () {
+      const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]
+      return profile
+    }
+  },
+  watch: {
   },
   mounted () {
     this.contractId = this.project.contractId
@@ -154,28 +210,6 @@ export default {
         result = false
       }
       return result
-    }
-  },
-  computed: {
-    mediaFiles1 () {
-      let files = []
-      if (this.files.length > 0) {
-        files = this.files
-      }
-      return files
-    },
-    decodedString () {
-      if (this.files.length === 0) {
-        return
-      }
-      const sub = 'data:application/octet-stream;base64,'
-      const octets = this.files[0].dataUrl.substring(sub.length)
-      const decodedString = atob(octets)
-      return decodedString
-    },
-    profile () {
-      const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]
-      return profile
     }
   }
 }

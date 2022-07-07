@@ -1,32 +1,59 @@
 <template>
-<b-container v-if="proposal">
-  <b-row class="mb-4 border">
-    <b-col cols="12" class="text-small text-primary">
-      <b-card>
-        <div class="" >
-          <b-link :class="(showNoop) ? 'text-underline' : 'text-secondary'" @click="showUpload = false; showNoop = true"><b-icon icon="chevron-right"></b-icon>Community Vote - the vote is for off-chain action</b-link>
-        </div>
-        <div class="mt-2">
-          <b-link :class="(showUpload) ? 'text-underline' : 'text-secondary'" @click="showUpload = true; showNoop = false"><b-icon icon="chevron-right"></b-icon>Full DAO Proposal - the proposal performs on-chain actions</b-link>
-        </div>
-      </b-card>
-    </b-col>
-    <b-col cols="12" v-if="showNoop">
-      <b-card>
-          Deploy a standard vote only proposal.
-          <pre class="text-xsmall py-4 my-3 source-code" v-html="contractSource"></pre>
-          <div class="mt-3 d-flex justify-content-start">
-            <b-button class="mr-3" @click="deployContract()">Deploy</b-button>
+  <b-container v-if="proposal">
+    <b-row class="mb-4 border">
+      <b-col
+        cols="12"
+        class="text-small text-primary"
+      >
+        <b-card>
+          <div class="">
+            <b-link
+              :class="(showNoop) ? 'text-underline' : 'text-secondary'"
+              @click="showUpload = false; showNoop = true"
+            >
+              <b-icon icon="chevron-right" />Community Vote - the vote is for off-chain action
+            </b-link>
           </div>
-      </b-card>
-    </b-col>
-    <b-col cols="12" v-if="showUpload">
-      <b-card>
-        <DeployContractFromFile />
-      </b-card>
-    </b-col>
-  </b-row>
-</b-container>
+          <div class="mt-2">
+            <b-link
+              :class="(showUpload) ? 'text-underline' : 'text-secondary'"
+              @click="showUpload = true; showNoop = false"
+            >
+              <b-icon icon="chevron-right" />Full DAO Proposal - the proposal performs on-chain actions
+            </b-link>
+          </div>
+        </b-card>
+      </b-col>
+      <b-col
+        v-if="showNoop"
+        cols="12"
+      >
+        <b-card>
+          Deploy a standard vote only proposal.
+          <pre
+            class="text-xsmall py-4 my-3 source-code"
+            v-html="contractSource"
+          />
+          <div class="mt-3 d-flex justify-content-start">
+            <b-button
+              class="mr-3"
+              @click="deployContract()"
+            >
+              Deploy
+            </b-button>
+          </div>
+        </b-card>
+      </b-col>
+      <b-col
+        v-if="showUpload"
+        cols="12"
+      >
+        <b-card>
+          <DeployContractFromFile />
+        </b-card>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
@@ -39,9 +66,10 @@ export default {
   components: {
     DeployContractFromFile
   },
-  props: ['proposal'],
+  props: ['templateProposal'],
   data: function () {
     return {
+      proposal: null,
       showUpload: false,
       showNoop: false,
       loaded: false,
@@ -67,6 +95,33 @@ export default {
 )
 `
     }
+  },
+  computed: {
+    isValid () {
+      return this.getErrors().length === 0
+    },
+    created: function () {
+      return DateTime.now().toLocaleString({ weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })
+    },
+    proposalContractIdState () {
+      if (!this.formSubmitted && this.proposal.onChain) return null
+      return (this.proposal.contractId && this.proposal.contractId.length > 2)
+    },
+    proposalTitleState () {
+      if (!this.formSubmitted && !this.proposal.title) return null
+      return (this.proposal.title && this.proposal.title.length > 2)
+    },
+    proposalProposerState () {
+      if (!this.formSubmitted && !this.proposal.proposer) return null
+      return (this.proposal.proposer && this.proposal.proposer.length > 2)
+    },
+    profile () {
+      const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]
+      return profile
+    }
+  },
+  mounted () {
+    this.proposal = this.templateProposal
   },
   mounted () {
     this.loaded = true
@@ -118,30 +173,6 @@ export default {
     },
     canDelete () {
       return this.profile.stxAddress === this.proposal.proposer && this.proposal.status === 'draft'
-    }
-  },
-  computed: {
-    isValid () {
-      return this.getErrors().length === 0
-    },
-    created: function () {
-      return DateTime.now().toLocaleString({ weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })
-    },
-    proposalContractIdState () {
-      if (!this.formSubmitted && this.proposal.onChain) return null
-      return (this.proposal.contractId && this.proposal.contractId.length > 2)
-    },
-    proposalTitleState () {
-      if (!this.formSubmitted && !this.proposal.title) return null
-      return (this.proposal.title && this.proposal.title.length > 2)
-    },
-    proposalProposerState () {
-      if (!this.formSubmitted && !this.proposal.proposer) return null
-      return (this.proposal.proposer && this.proposal.proposer.length > 2)
-    },
-    profile () {
-      const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]
-      return profile
     }
   }
 }

@@ -1,45 +1,110 @@
 <template>
-<section v-if="ghIssues">
-  <b-container class="my-5">
-    <b-row class="my-2 text-left text-small">
-      <b-col sm="12" md="6">
-        <div>
-          <b-link @click="changeFilter('issues')" :class="(filter === 'issues') ? 'text-bold' : ''" class="pointer pr-3 mr-3 border-right" v-b-tooltip.hover="{ variant: 'dark' }" :title="'Open issues from GitHub'">SIP Suggestions ({{ghIssuesNumb}})</b-link>
-          <b-link @click="changeFilter('pulls')" :class="(filter === 'pulls') ? 'text-bold' : ''" class="pointer mr-3" v-b-tooltip.hover="{ variant: 'dark' }" :title="'Open pull requests from GitHub'">SIP Proposals ({{ghPullsNumb}})</b-link>
-        </div>
-      </b-col>
-      <b-col sm="12" md="6" class="text-right">
-        <div>
-          <!-- Type: <span class="pointer mr-3 pr-3" v-b-tooltip.hover="{ variant: 'dark' }" :title="'GitHub Open Issues'">OPEN</span> -->
-          <b-dropdown size="sm" id="dropdown-1" right text="Status" variant="outline-info">
-            <b-dropdown-item  v-for="(status, index) in statusNames" :key="index"  @click.prevent="toggleSearching(status)"><span class="text-small">{{status}}</span></b-dropdown-item>
-          </b-dropdown>
-        </div>
-      </b-col>
-    </b-row>
-    <b-row class="my-2 text-left">
-      <b-col cols="12">
-        <b-table striped hover :items="values()" :fields="fields()" class="text-small">
-          <template #cell(Title)="data">
-            <b-link class="text-info" variant="warning" v-on:click="openProposal(data)" v-html="data.value"></b-link>
-          </template>
-          <template #cell(Actions)="data">
-            <b-link target="_blank" class="mr-2 text-info" variant="warning" :href="githubUrl(data)"><span v-b-tooltip.hover="{ variant: 'dark' }" :title="'View on GitHub'"><b-icon icon="arrow-up-right-square"/></span></b-link>
-          </template>
-          <template #cell(Labels)="data">
-            <b-link class="mr-2 text-small" variant="warning">{{data.value}}</b-link>
-          </template>
-        </b-table>
-      </b-col>
-    </b-row>
-  </b-container>
-</section>
-<section v-else-if="!loaded && !ghIssues">
-  <b-container class="my-5">No ghIssue found..</b-container>
-</section>
-<section v-else>
-  <b-container class="my-5">Querying for issues..</b-container>
-</section>
+  <section v-if="ghIssues">
+    <b-container class="my-5">
+      <b-row class="my-2 text-left text-small">
+        <b-col
+          sm="12"
+          md="6"
+        >
+          <div>
+            <b-link
+              v-b-tooltip.hover="{ variant: 'dark' }"
+              :class="(filter === 'issues') ? 'text-bold' : ''"
+              class="pointer pr-3 mr-3 border-right"
+              :title="'Open issues from GitHub'"
+              @click="changeFilter('issues')"
+            >
+              SIP Suggestions ({{ ghIssuesNumb }})
+            </b-link>
+            <b-link
+              v-b-tooltip.hover="{ variant: 'dark' }"
+              :class="(filter === 'pulls') ? 'text-bold' : ''"
+              class="pointer mr-3"
+              :title="'Open pull requests from GitHub'"
+              @click="changeFilter('pulls')"
+            >
+              SIP Proposals ({{ ghPullsNumb }})
+            </b-link>
+          </div>
+        </b-col>
+        <b-col
+          sm="12"
+          md="6"
+          class="text-right"
+        >
+          <div>
+            <!-- Type: <span class="pointer mr-3 pr-3" v-b-tooltip.hover="{ variant: 'dark' }" :title="'GitHub Open Issues'">OPEN</span> -->
+            <b-dropdown
+              id="dropdown-1"
+              size="sm"
+              right
+              text="Status"
+              variant="outline-info"
+            >
+              <b-dropdown-item
+                v-for="(status, index) in statusNames"
+                :key="index"
+                @click.prevent="toggleSearching(status)"
+              >
+                <span class="text-small">{{ status }}</span>
+              </b-dropdown-item>
+            </b-dropdown>
+          </div>
+        </b-col>
+      </b-row>
+      <b-row class="my-2 text-left">
+        <b-col cols="12">
+          <b-table
+            striped
+            hover
+            :items="values()"
+            :fields="fields()"
+            class="text-small"
+          >
+            <template #cell(Title)="data">
+              <b-link
+                class="text-info"
+                variant="warning"
+                @click="openProposal(data)"
+                v-html="data.value"
+              />
+            </template>
+            <template #cell(Actions)="data">
+              <b-link
+                target="_blank"
+                class="mr-2 text-info"
+                variant="warning"
+                :href="githubUrl(data)"
+              >
+                <span
+                  v-b-tooltip.hover="{ variant: 'dark' }"
+                  :title="'View on GitHub'"
+                ><b-icon icon="arrow-up-right-square" /></span>
+              </b-link>
+            </template>
+            <template #cell(Labels)="data">
+              <b-link
+                class="mr-2 text-small"
+                variant="warning"
+              >
+                {{ data.value }}
+              </b-link>
+            </template>
+          </b-table>
+        </b-col>
+      </b-row>
+    </b-container>
+  </section>
+  <section v-else-if="!loaded && !ghIssues">
+    <b-container class="my-5">
+      No ghIssue found..
+    </b-container>
+  </section>
+  <section v-else>
+    <b-container class="my-5">
+      Querying for issues..
+    </b-container>
+  </section>
 </template>
 
 <script>
@@ -56,6 +121,30 @@ export default {
       statusFilter: null,
       filter: 'issues',
       loaded: false
+    }
+  },
+  computed: {
+    allGhIssues () {
+      const ghIssues = this.$store.getters[APP_CONSTANTS.KEY_SIP_ISSUES]
+      return ghIssues
+    },
+    ghIssues () {
+      let ghIssues = this.$store.getters[APP_CONSTANTS.KEY_SIP_ISSUES]
+      if (!this.filter || this.filter === 'issues') {
+        ghIssues = ghIssues.filter((o) => !o.pullRequest)
+      } else if (this.filter === 'pulls') {
+        ghIssues = ghIssues.filter((o) => o.pullRequest)
+      }
+      if (this.statusFilter) {
+        ghIssues = ghIssues.filter((o) => (o.labels) ? o.labels[0].name.toLowerCase() === this.statusFilter : false)
+      }
+      return ghIssues
+    },
+    ghIssuesNumb () {
+      return this.allGhIssues.filter((o) => !o.pullRequest).length
+    },
+    ghPullsNumb () {
+      return this.allGhIssues.filter((o) => o.pullRequest).length
     }
   },
   mounted () {
@@ -127,30 +216,6 @@ export default {
         labelNames += label.name
       })
       return labelNames
-    }
-  },
-  computed: {
-    allGhIssues () {
-      const ghIssues = this.$store.getters[APP_CONSTANTS.KEY_SIP_ISSUES]
-      return ghIssues
-    },
-    ghIssues () {
-      let ghIssues = this.$store.getters[APP_CONSTANTS.KEY_SIP_ISSUES]
-      if (!this.filter || this.filter === 'issues') {
-        ghIssues = ghIssues.filter((o) => !o.pullRequest)
-      } else if (this.filter === 'pulls') {
-        ghIssues = ghIssues.filter((o) => o.pullRequest)
-      }
-      if (this.statusFilter) {
-        ghIssues = ghIssues.filter((o) => (o.labels) ? o.labels[0].name.toLowerCase() === this.statusFilter : false)
-      }
-      return ghIssues
-    },
-    ghIssuesNumb () {
-      return this.allGhIssues.filter((o) => !o.pullRequest).length
-    },
-    ghPullsNumb () {
-      return this.allGhIssues.filter((o) => o.pullRequest).length
     }
   }
 }

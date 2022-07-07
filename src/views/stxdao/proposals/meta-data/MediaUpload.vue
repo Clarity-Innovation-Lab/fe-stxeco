@@ -1,38 +1,93 @@
 <template>
-<div class="">
-  <div @drop.prevent="loadMediaObjects" @dragover.prevent class="p-4 drop-zone d-flex flex-column align-items-center">
-    <div class="mt-4 mb-5" v-html="contentModel.title"></div>
-    <div class="mx-5 px-5 " style="border: 1pt dashed #000;">
-      <div class="mt-5" v-html="contentModel.message"></div>
-      <div v-if="contentModel.iconName" class="mt-5"><b-icon class="text-warning" scale="3" :icon="contentModel.iconName"/></div>
-      <div>
-        <input style="width: 80%;" class="input-file" type="file" :ref="getUploadId()" @change="loadMediaObjects"/>
+  <div class="">
+    <div
+      class="p-4 drop-zone d-flex flex-column align-items-center"
+      @drop.prevent="loadMediaObjects"
+      @dragover.prevent
+    >
+      <div
+        class="mt-4 mb-5"
+        v-html="contentModel.title"
+      />
+      <div
+        class="mx-5 px-5 "
+        style="border: 1pt dashed #000;"
+      >
+        <div
+          class="mt-5"
+          v-html="contentModel.message"
+        />
+        <div
+          v-if="contentModel.iconName"
+          class="mt-5"
+        >
+          <b-icon
+            class="text-warning"
+            scale="3"
+            :icon="contentModel.iconName"
+          />
+        </div>
+        <div>
+          <input
+            :ref="getUploadId()"
+            style="width: 80%;"
+            class="input-file"
+            type="file"
+            @change="loadMediaObjects"
+          >
+        </div>
+        <div
+          class="mx-auto"
+          style="position:relative; top: 35px;"
+        >
+          <b-button
+            variant="light"
+            @click="chooseFiles()"
+            v-html="contentModel.buttonName"
+          />
+        </div>
       </div>
-      <div class="mx-auto" style="position:relative; top: 35px;">
-        <b-button variant="light" v-html="contentModel.buttonName" @click="chooseFiles()"></b-button>
+      <div v-if="!hideLinkPaste">
+        <div class="mt-5 pt-5 text-small">
+          for files > 20M paste a link! <br>Need hosting? E.g. see <a
+            href="https://docs.stacks.co/build-apps/references/gaia"
+            target="_blank"
+          >Gaia</a>, <a
+            href="https://ipfs.io/"
+            target="_blanK"
+          >IPFS</a> or <a
+            href="https://cloudinary.com/"
+            target="_blanK"
+          >Cloudinary</a>
+        </div>
+        <div
+          class="mt-3 text-left mb-3"
+          style="font-size: 1.2rem; width: 100%;"
+        >
+          <b-form-input
+            id="item-name"
+            v-model="directUrl"
+            aria-describedby="item-name-help item-name-feedback"
+            placeholder="Paste link"
+            trim
+            @keyup="startDownload()"
+          />
+        </div>
       </div>
-    </div>
-    <div v-if="!hideLinkPaste">
-      <div class="mt-5 pt-5 text-small">for files > 20M paste a link! <br/>Need hosting? E.g. see <a href="https://docs.stacks.co/build-apps/references/gaia" target="_blank">Gaia</a>, <a href="https://ipfs.io/" target="_blanK">IPFS</a> or <a href="https://cloudinary.com/" target="_blanK">Cloudinary</a></div>
-      <div class="mt-3 text-left mb-3" style="font-size: 1.2rem; width: 100%;">
-        <b-form-input
-          id="item-name"
-          v-model="directUrl"
-          @keyup="startDownload()"
-          aria-describedby="item-name-help item-name-feedback"
-          placeholder="Paste link"
-          trim
-        ></b-form-input>
+      <div
+        v-if="showError"
+        class="invalid-feedback d-block"
+      >
+        {{ contentModel.errorMessage }}
       </div>
-    </div>
-    <div class="invalid-feedback d-block" v-if="showError">
-      {{contentModel.errorMessage}}
-    </div>
-    <div class="invalid-feedback d-block" v-if="internalError">
-      {{internalError}}
+      <div
+        v-if="internalError"
+        class="invalid-feedback d-block"
+      >
+        {{ internalError }}
+      </div>
     </div>
   </div>
-</div>
 <!--/droppable area 1 -->
 </template>
 
@@ -108,6 +163,14 @@ export default {
       missing: '/img/pdf-holding.png'
     }
   },
+  computed: {
+    checkQuantity: function () {
+      return this.mediaObjects.length < Number(this.limit)
+    },
+    columns  () {
+      return 'col-' + this.size
+    }
+  },
   mounted () {
     if (this.contentModel) {
       // Object.assign(this.myContentModel, this.contentModel)
@@ -116,14 +179,6 @@ export default {
     if (this.mediaFiles && this.mediaFiles.length > 0) {
       Object.assign(this.mediaObjects, this.mediaFiles)
       this.loaded = true
-    }
-  },
-  computed: {
-    checkQuantity: function () {
-      return this.mediaObjects.length < Number(this.limit)
-    },
-    columns  () {
-      return 'col-' + this.size
     }
   },
   methods: {

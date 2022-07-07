@@ -1,9 +1,24 @@
 <template>
-<div>
-    <span ref="flashee" class="mr-3">{{getAddress}}</span>
-    <a v-if="owner" href="#" class="pointer" v-b-tooltip.hover="{ variant: 'dark' }" :title="'Copy address'" @click.prevent="copyAddress('stx')"><b-icon icon="file-earmark"/></a>
-    <input class="mr-3 fake-input" id="copy-stx-address" readonly v-model="owner"/>
-</div>
+  <div>
+    <span
+      ref="flashee"
+      class="mr-3"
+    >{{ getAddress }}</span>
+    <a
+      v-if="newOwner"
+      v-b-tooltip.hover="{ variant: 'dark' }"
+      href="#"
+      class="pointer"
+      :title="'Copy address'"
+      @click.prevent="copyAddress('stx')"
+    ><b-icon icon="file-earmark" /></a>
+    <input
+      id="copy-stx-address"
+      v-model="newOwner"
+      class="mr-3 fake-input"
+      readonly
+    >
+  </div>
 </template>
 <script>
 
@@ -14,12 +29,22 @@ export default {
   props: ['owner'],
   data () {
     return {
-      stxAddress: null
+      stxAddress: null,
+      newOwner: null
+    }
+  },
+  computed: {
+    getAddress: function () {
+      if (this.bnsName) {
+        return this.bnsName
+      }
+      return this.splitAddress(this.newOwner)
     }
   },
   mounted () {
+    this.newOwner = this.owner
     this.stxAddress = this.owner
-    this.$store.dispatch('daoAuthStore/fetchBnsNames', [this.owner]).then((bnsNames) => {
+    this.$store.dispatch('daoAuthStore/fetchBnsNames', [this.newOwner]).then((bnsNames) => {
       if (bnsNames && bnsNames.length > 0) {
         this.bnsName = bnsNames[0].bnsEntry
       }
@@ -44,14 +69,6 @@ export default {
       setTimeout(function () {
         flasher.classList.remove('flasher')
       }, 1000)
-    }
-  },
-  computed: {
-    getAddress: function () {
-      if (this.bnsName) {
-        return this.bnsName
-      }
-      return this.splitAddress(this.owner)
     }
   }
 }

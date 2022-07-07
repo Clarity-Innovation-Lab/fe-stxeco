@@ -1,15 +1,39 @@
 <template>
-<b-container fluid class="py-0 my-0">
-  <b-navbar variant="" class="py-0 my-0 text-small">
-    <b-collapse id="nav-collapse" is-nav>
-      <b-navbar class="mx-auto my-0 py-0 text-white">
-        <b-nav-item to="/stxdao/extensions" class="my-0 py-0 mr-3 pr-3 border-right">Extensions</b-nav-item>
-        <b-nav-item to="/stxdao/proposals" class="my-0 py-0 mr-3 pr-3 border-right">Proposals</b-nav-item>
-        <b-nav-item to="/stxdao/membership" class="my-0 py-0">Membership</b-nav-item>
-      </b-navbar>
-    </b-collapse>
-  </b-navbar>
-</b-container>
+  <b-container
+    fluid
+    class="py-0 my-0"
+  >
+    <b-navbar
+      variant=""
+      class="py-0 my-0 text-small"
+    >
+      <b-collapse
+        id="nav-collapse"
+        is-nav
+      >
+        <b-navbar class="mx-auto my-0 py-0 text-white">
+          <b-nav-item
+            to="/stxdao/extensions"
+            class="my-0 py-0 mr-3 pr-3 border-right"
+          >
+            Extensions
+          </b-nav-item>
+          <b-nav-item
+            to="/stxdao/proposals"
+            class="my-0 py-0 mr-3 pr-3 border-right"
+          >
+            Proposals
+          </b-nav-item>
+          <b-nav-item
+            to="/stxdao/membership"
+            class="my-0 py-0"
+          >
+            Membership
+          </b-nav-item>
+        </b-navbar>
+      </b-collapse>
+    </b-navbar>
+  </b-container>
 </template>
 
 <script>
@@ -17,17 +41,67 @@ import { APP_CONSTANTS } from '@/app-constants'
 
 export default {
   name: 'SecondNavbar',
+  components: {
+  },
   props: {
     transparent: Boolean,
-    colorOnScroll: Number
-  },
-  components: {
+    colorOnScroll: {
+      type: Number,
+      default: 0
+    }
   },
   data () {
     return {
       iconSN: require('@/assets/img/EAG - WEB UX assets - png/EAG - stacks neon.png'),
       iconGrey: require('@/assets/img/EAG - WEB UX assets - png/EAG - stacks grey.png'),
       toggler: require('@/assets/img/logo.png')
+    }
+  },
+  computed: {
+    getTotalDelegatedToMe () {
+      return this.$store.getters[APP_CONSTANTS.KEY_GOV_TOKEN_BALANCE_DELEGATED]
+    },
+    getTokenBalance () {
+      return this.$store.getters[APP_CONSTANTS.KEY_GOV_TOKEN_BALANCE]
+    },
+    getTokenBalanceLocked () {
+      return this.$store.getters[APP_CONSTANTS.KEY_GOV_TOKEN_BALANCE_LOCKED]
+    },
+    isHomePage () {
+      return this.$route.name === 'home'
+    },
+    stxRate () {
+      const stxRate = this.$store.getters[APP_CONSTANTS.KEY_STX_RATE]
+      return stxRate
+    },
+    // playMode () {
+    // const playMode = this.$store.getters[APP_CONSTANTS.KEY_PLAY_MODE]
+    // return playMode
+    // },
+    provider () {
+      const provider = this.$store.getters[APP_CONSTANTS.KEY_PROVIDER]
+      return provider
+    },
+    networkId () {
+      const networkId = this.$store.getters[APP_CONSTANTS.KEY_NETWORK_ID]
+      return networkId
+    },
+    username () {
+      const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]
+      return profile.name || profile.stxAddress
+    },
+    profile () {
+      const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]
+      return profile
+    },
+    accountInfo () {
+      const accountInfo = this.$store.getters[APP_CONSTANTS.KEY_ACCOUNT_INFO]
+      return accountInfo
+    },
+    bnsName () {
+      const bnsNames = this.$store.getters[APP_CONSTANTS.KEY_BNS_NAMES]
+      if (bnsNames && bnsNames.length > 0) return bnsNames[0]
+      return this.profile.stxAddress
     }
   },
   methods: {
@@ -81,53 +155,6 @@ export default {
       } else {
         this.$notify({ type: 'warning', title: 'Networks', text: 'Stacks 2.0 is not yet live!' })
       }
-    }
-  },
-  computed: {
-    getTotalDelegatedToMe () {
-      return this.$store.getters[APP_CONSTANTS.KEY_GOV_TOKEN_BALANCE_DELEGATED]
-    },
-    getTokenBalance () {
-      return this.$store.getters[APP_CONSTANTS.KEY_GOV_TOKEN_BALANCE]
-    },
-    getTokenBalanceLocked () {
-      return this.$store.getters[APP_CONSTANTS.KEY_GOV_TOKEN_BALANCE_LOCKED]
-    },
-    isHomePage () {
-      return this.$route.name === 'home'
-    },
-    stxRate () {
-      const stxRate = this.$store.getters[APP_CONSTANTS.KEY_STX_RATE]
-      return stxRate
-    },
-    // playMode () {
-    // const playMode = this.$store.getters[APP_CONSTANTS.KEY_PLAY_MODE]
-    // return playMode
-    // },
-    provider () {
-      const provider = this.$store.getters[APP_CONSTANTS.KEY_PROVIDER]
-      return provider
-    },
-    networkId () {
-      const networkId = this.$store.getters[APP_CONSTANTS.KEY_NETWORK_ID]
-      return networkId
-    },
-    username () {
-      const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]
-      return profile.name || profile.stxAddress
-    },
-    profile () {
-      const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]
-      return profile
-    },
-    accountInfo () {
-      const accountInfo = this.$store.getters[APP_CONSTANTS.KEY_ACCOUNT_INFO]
-      return accountInfo
-    },
-    bnsName () {
-      const bnsNames = this.$store.getters[APP_CONSTANTS.KEY_BNS_NAMES]
-      if (bnsNames && bnsNames.length > 0) return bnsNames[0]
-      return this.profile.stxAddress
     }
   }
 }

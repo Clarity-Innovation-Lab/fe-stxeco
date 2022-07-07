@@ -1,18 +1,26 @@
 <template>
-<b-card-group>
-  <b-card header-tag="header" footer-tag="footer" class="sip-card"
-    text-variant="light"
-  >
-    <b-card-text class="mt-0">
-      <div v-html="cardContent"></div>
-    </b-card-text>
-    <template #footer>
-      <div class="d-flex justify-content-around">
-        <b-button variant="outline-dark" :to="path">{{label}}</b-button>
-      </div>
-    </template>
-  </b-card>
-</b-card-group>
+  <b-card-group>
+    <b-card
+      header-tag="header"
+      footer-tag="footer"
+      class="sip-card"
+      text-variant="light"
+    >
+      <b-card-text class="mt-0">
+        <div v-html="cardContent" />
+      </b-card-text>
+      <template #footer>
+        <div class="d-flex justify-content-around">
+          <b-button
+            variant="outline-dark"
+            :to="path"
+          >
+            {{ label }}
+          </b-button>
+        </div>
+      </template>
+    </b-card>
+  </b-card-group>
 </template>
 
 <script>
@@ -25,22 +33,6 @@ export default {
   props: ['cardContent', 'path', 'label', 'bgImage', 'textColor'],
   data () {
     return {
-    }
-  },
-  mounted () {
-  },
-  methods: {
-    startLogin () {
-      // this.$emit('updateEventCode', { eventCode: 'connect-login' })
-      const myProfile = this.$store.getters['daoAuthStore/getMyProfile']
-      if (myProfile.loggedIn) {
-        this.$emit('connect-login', myProfile)
-      } else {
-        this.$store.dispatch('daoAuthStore/startLogin').catch(() => {
-          // https://www.hiro.so/wallet/install-web
-          this.$store.commit(APP_CONSTANTS.SET_WEB_WALLET_NEEDED)
-        })
-      }
     }
   },
   computed: {
@@ -57,6 +49,22 @@ export default {
     profile () {
       const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]
       return profile
+    }
+  },
+  mounted () {
+  },
+  methods: {
+    startLogin () {
+      // this.$emit('updateEventCode', { eventCode: 'connect-login' })
+      const myProfile = this.$store.getters['daoAuthStore/getMyProfile']
+      if (myProfile.loggedIn) {
+        this.$emit('connect-login', myProfile)
+      } else {
+        this.$store.dispatch('daoAuthStore/startLogin').catch(() => {
+          // https://www.hiro.so/wallet/install-web
+          this.$store.commit(APP_CONSTANTS.SET_WEB_WALLET_NEEDED)
+        })
+      }
     }
   }
 }

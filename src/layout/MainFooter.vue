@@ -1,47 +1,125 @@
 <template>
   <div class="mx-0 text-small mb-5">
     <b-container fluid>
-      <b-row align-h="start" class="mb-4">
-        <b-col cols="12" class="text-center">
-          For the <b-icon icon="heart-fill" class="text-danger"/> of crypto!
+      <b-row
+        align-h="start"
+        class="mb-4"
+      >
+        <b-col
+          cols="12"
+          class="text-center"
+        >
+          For the <b-icon
+            icon="heart-fill"
+            class="text-danger"
+          /> of crypto!
         </b-col>
       </b-row>
     </b-container>
-    <b-container fluid align-h="center" class="m-5">
-      <b-row align-h="start" class="footer-top pb-5">
-        <b-col md="4" sm="12" class="">
+    <b-container
+      fluid
+      align-h="center"
+      class="m-5"
+    >
+      <b-row
+        align-h="start"
+        class="footer-top pb-5"
+      >
+        <b-col
+          md="4"
+          sm="12"
+          class=""
+        >
           <h1>Clarity Lab</h1>
         </b-col>
-        <b-col md="2" sm="6" class="footer-top--content">
-          <div class="column-header ">Code</div>
-          <div>
-            <a :href="'https://github.com/Clarity-Innovation-Lab'" target="_blank">Clarity Lab</a>
+        <b-col
+          md="2"
+          sm="6"
+          class="footer-top--content"
+        >
+          <div class="column-header ">
+            Code
           </div>
           <div>
-            <a :href="'https://github.com/Clarity-Innovation-Lab/executor-dao/issues'" target="_blank">DAO Issues</a>
+            <a
+              :href="'https://github.com/Clarity-Innovation-Lab'"
+              target="_blank"
+            >Clarity Lab</a>
+          </div>
+          <div>
+            <a
+              :href="'https://github.com/Clarity-Innovation-Lab/executor-dao/issues'"
+              target="_blank"
+            >DAO Issues</a>
           </div>
         </b-col>
-        <b-col md="2" sm="6"  class="footer-top--content">
-          <div class="column-header ">Videos</div>
-          <div>
-            <a target="_blank" href="https://www.youtube.com/watch?v=fbq6L3PrKWE">Stacks</a>
+        <b-col
+          md="2"
+          sm="6"
+          class="footer-top--content"
+        >
+          <div class="column-header ">
+            Videos
           </div>
           <div>
-            <a target="_blank" href="https://www.youtube.com/watch?v=OAVwd6SNJVU&t=717s">Clarity</a>
+            <a
+              target="_blank"
+              href="https://www.youtube.com/watch?v=fbq6L3PrKWE"
+            >Stacks</a>
+          </div>
+          <div>
+            <a
+              target="_blank"
+              href="https://www.youtube.com/watch?v=OAVwd6SNJVU&t=717s"
+            >Clarity</a>
           </div>
         </b-col>
-        <b-col md="2" sm="6"  class="footer-top--content">
-          <div class="column-header ">Contact</div>
-          <div><a href="https://discord.com/channels/621759717756370964/971037457661444156" target="_blank">Discord</a></div>
-          <div><a href="mailto:mike@claritylab.dev" target="_blank">Enquiries</a></div>
+        <b-col
+          md="2"
+          sm="6"
+          class="footer-top--content"
+        >
+          <div class="column-header ">
+            Contact
+          </div>
+          <div>
+            <a
+              href="https://discord.com/channels/621759717756370964/971037457661444156"
+              target="_blank"
+            >Discord</a>
+          </div>
+          <div>
+            <a
+              href="mailto:mike@claritylab.dev"
+              target="_blank"
+            >Enquiries</a>
+          </div>
         </b-col>
-        <b-col md="2" sm="6"  class="footer-top--content">
-          <div class="column-header ">Partners</div>
-          <div><a class="" href="https://stacks.org/" target="_blank">Foundation</a></div>
-          <div><a class="" :href="webWalletLink" target="_blank">Hiro Wallet</a></div>
+        <b-col
+          md="2"
+          sm="6"
+          class="footer-top--content"
+        >
+          <div class="column-header ">
+            Partners
+          </div>
+          <div>
+            <a
+              class=""
+              href="https://stacks.org/"
+              target="_blank"
+            >Foundation</a>
+          </div>
+          <div>
+            <a
+              class=""
+              :href="webWalletLink"
+              target="_blank"
+            >Hiro Wallet</a>
+          </div>
         </b-col>
       </b-row>
-        <!--
+      <!--
       <div class="d-none d-sm-flex justify-content-between footer-bottom">
         <div class="footer-bottom--left">
           {{ content.left_bottom_corner[0].text }}
@@ -64,7 +142,6 @@
         </div>
       </div>
         -->
-
     </b-container>
   </div>
 </template>
@@ -77,6 +154,21 @@ export default {
   data () {
     return {
       webWalletNeeded: false
+    }
+  },
+  computed: {
+    webWalletLink () {
+      if (this.$browserDetect.isFirefox) {
+        return this.$store.getters[APP_CONSTANTS.KEY_WEB_WALLET_LINK_FIREFOX]
+      }
+      return this.$store.getters[APP_CONSTANTS.KEY_WEB_WALLET_LINK_CHROME]
+    },
+    loggedIn () {
+      const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]
+      return profile.loggedIn
+    },
+    getBreakLine () {
+      return this.$store.getters[APP_CONSTANTS.KEY_BREAK_LINE]
     }
   },
   methods: {
@@ -95,21 +187,6 @@ export default {
         // https://www.hiro.so/wallet/install-web
         this.webWalletNeeded = true
       })
-    }
-  },
-  computed: {
-    webWalletLink () {
-      if (this.$browserDetect.isFirefox) {
-        return this.$store.getters[APP_CONSTANTS.KEY_WEB_WALLET_LINK_FIREFOX]
-      }
-      return this.$store.getters[APP_CONSTANTS.KEY_WEB_WALLET_LINK_CHROME]
-    },
-    loggedIn () {
-      const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]
-      return profile.loggedIn
-    },
-    getBreakLine () {
-      return this.$store.getters[APP_CONSTANTS.KEY_BREAK_LINE]
     }
   }
 }
