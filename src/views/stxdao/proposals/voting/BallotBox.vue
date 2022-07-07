@@ -78,7 +78,7 @@ export default {
       if (data.amount) this.amount = data.amount
       this.castVote()
     },
-    castVote (vfor) {
+    castVote () {
       const vote = {
         proposalContractId: this.proposal.contractId,
         amount: this.amount,

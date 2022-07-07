@@ -10,7 +10,7 @@ const btcPrecision = 100000000
 const utils = {
   buildHash: function (hashable) {
     const hash = sha256.create()
-    hash.update('Message to hash')
+    hash.update(hashable)
     return hash.hex()
     // return crypto.createHash('sha256').update(hashable).digest('hex')
   },

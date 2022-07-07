@@ -103,7 +103,7 @@ export default {
       if (!this.proposal.created) this.proposal.created = DateTime.now().ts
       if (!this.proposal.updated) this.proposal.updated = DateTime.now().ts
       if (!this.proposal.status) this.proposal.status = 'draft'
-      this.$store.dispatch('daoProposalStore/saveProposal', this.proposal).then((result) => {
+      this.$store.dispatch('daoProposalStore/saveProposal', this.proposal).then(() => {
         this.$emit('proposals', { opcode: 'proposal-saved', proposal: this.proposal })
         this.$notify({ type: 'success', title: 'Proposal Saved', text: 'Proposal save. Status: ' + this.proposal.status })
       })

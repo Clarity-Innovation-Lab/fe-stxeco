@@ -177,11 +177,8 @@ const daoProposalStore = {
     }
   },
   actions: {
-    initialiseProposalMetaData ({ state, dispatch, commit }, stxAddress) {
+    initialiseProposalMetaData ({ dispatch }) {
       dispatch('fetchProposals')
-    },
-    initialiseProposalContractData ({ state, dispatch, commit }, stxAddress) {
-      // return initialiseProposalData(state, dispatch, commit, stxAddress)
     },
     submitProposal ({ dispatch, commit }, proposal) {
       return new Promise((resolve, reject) => {
@@ -219,7 +216,7 @@ const daoProposalStore = {
       })
     },
     constructDao ({ state, dispatch }) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         const bootstrap = state.proposals.find((p) => (p.contractId) && p.contractId.indexOf('edp000-bootstrap') > -1)
         const contractId = bootstrap.contractId
         const callData = {
@@ -243,11 +240,12 @@ const daoProposalStore = {
       })
     },
     fetchBlockchainInfo ({ dispatch, commit }) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         const path = '/v2/info'
         const txOptions = { path: path, httpMethod: 'GET', postData: { arguments: [], sender: null } }
         dispatch('daoStacksStore/callApiDirect', txOptions, { root: true }).then((result) => {
           commit('setBlockchainInfo', result)
+          resolve(result)
         })
       })
     },
@@ -277,7 +275,7 @@ const daoProposalStore = {
     },
     fetchProposalFromChain ({ dispatch }, contractId) {
       return new Promise((resolve, reject) => {
-        axios.get(configuration.clarityLabApi + '/mesh/v2/process-proposal-data/' + contractId).then(response => {
+        axios.get(configuration.clarityLabApi + '/mesh/v2/process-proposal-data/' + contractId).then(() => {
           dispatch('fetchProposal', contractId).then((props) => {
             resolve(props)
           })

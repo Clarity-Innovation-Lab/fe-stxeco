@@ -233,10 +233,11 @@ const daoAuthStore = {
         }
       })
     },
-    fetchNoncesFor ({ rootGetters }, stxAddress) {
+    fetchNoncesFor ({ commit }, stxAddress) {
       return new Promise(resolve => {
         const url = process.env.VUE_APP_STACKS_API_EXTENDED + '/extended/v1/address/' + stxAddress + '/nonces'
         axios.get(url).then((response) => {
+          commit('setNonce', response.data)
           resolve(response.data)
         }).catch(() => {
           resolve()
@@ -254,7 +255,7 @@ const daoAuthStore = {
         resolve(getProfile(network))
       })
     },
-    fetchAccountInfo ({ dispatch, state, commit }, data) {
+    fetchAccountInfo ({ state, commit }, data) {
       return new Promise((resolve) => {
         if (!data || !data.stxAddress) {
           resolve()

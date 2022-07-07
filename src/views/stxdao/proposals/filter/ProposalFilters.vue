@@ -60,7 +60,7 @@ export default {
         this.result = result
       })
     },
-    toggleSearching (asset) {
+    toggleSearching () {
       this.$emit('updateResults', { opcode: 'update-results', query: this.query })
     }
   },

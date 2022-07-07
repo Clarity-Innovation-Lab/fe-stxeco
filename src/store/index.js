@@ -57,7 +57,7 @@ export default new Vuex.Store({
         dispatch('daoSIPStore/fetchIssues')
         dispatch('daoRatesStore/initialiseRates').then(() => {
           dispatch('daoAuthStore/fetchMyAccount').then((profile) => {
-            dispatch('daoProposalStore/initialiseProposalMetaData', profile.stxAddress).then((results) => {
+            dispatch('daoProposalStore/initialiseProposalMetaData', profile.stxAddress).then(() => {
               dispatch('daoGovernanceStore/initialiseGovernanceData', profile.stxAddress)
               dispatch('daoExtensionStore/fetchExtensions')
               dispatch('daoProposalStore/initialiseProposalContractData')

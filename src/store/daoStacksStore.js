@@ -51,12 +51,7 @@ const daoStacksStore = {
     }
   },
   actions: {
-    cleanup ({ state }) {
-      return new Promise((resolve, reject) => {
-        resolve(null)
-      })
-    },
-    callContractWithPrivateKey ({ commit, state, dispatch, rootGetters }, data) {
+    callContractWithPrivateKey ({ commit, dispatch }, data) {
       return new Promise((resolve, reject) => {
         let network = mocknet
         if (configuration.network === 'mainnet') network = mainnet
@@ -107,7 +102,7 @@ const daoStacksStore = {
         })
       })
     },
-    callContractBlockstack ({ dispatch, commit, state }, data) {
+    callContractBlockstack ({ state }, data) {
       return new Promise((resolve, reject) => {
         let network = mocknet
         if (configuration.network === 'mainnet') network = mainnet
@@ -210,7 +205,7 @@ const daoStacksStore = {
         }
         dispatch('callContractReadOnly', config).then((result) => {
           resolve(result)
-        }).catch((e) => {
+        }).catch(() => {
           resolve(null)
         })
       })
@@ -226,7 +221,7 @@ const daoStacksStore = {
         }
         dispatch('callContractReadOnly', config).then((result) => {
           resolve(result)
-        }).catch((e) => {
+        }).catch(() => {
           resolve(null)
         })
       })
@@ -242,12 +237,12 @@ const daoStacksStore = {
         }
         dispatch('callContractReadOnly', config).then((result) => {
           resolve(result)
-        }).catch((e) => {
+        }).catch(() => {
           resolve(null)
         })
       })
     },
-    lookupToken: function ({ dispatch, commit }, data) {
+    lookupToken: function ({ dispatch }, data) {
       return new Promise(function (resolve) {
         const functionArgs = [`0x${serializeCV(uintCV(data.nftIndex)).toString('hex')}`]
         const config = {
@@ -266,13 +261,13 @@ const daoStacksStore = {
           } else {
             resolve(null)
           }
-        }).catch((e) => {
+        }).catch(() => {
           resolve(null)
         })
       })
     },
     lookupTokenByIndex: function ({ dispatch }, data) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         data.a1 = intCV(data.nftIndex)
         data.a2 = serializeCV(data.a1)
         data.a3 = (data.a2).toString('hex')
@@ -284,7 +279,7 @@ const daoStacksStore = {
       })
     },
     lookupTokenByHash ({ dispatch }, data) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         const buffer = `0x${serializeCV(bufferCV(Buffer.from(data.assetHash, 'hex'))).toString('hex')}` // Buffer.from(hash.toString(CryptoJS.enc.Hex), 'hex')
         data.functionArgs = [buffer]
         data.functionName = 'get-token-by-hash'
@@ -303,7 +298,7 @@ const daoStacksStore = {
         }
         axios.post(configuration.clarityLabApi + '/mesh' + '/v2/accounts', txOptions).then(response => {
           resolve({ contractId: contractId, interface: response.data })
-          // commit('addValue', response)
+          commit('addValue', response)
         }).catch(() => {
           axios.get(configuration.stacksApi + '/v2/contracts/interface/' + contractAddress + '/' + contractName + '?proof=0').then(response => {
             resolve({ contractId: contractId, interface: response.data })
@@ -313,7 +308,7 @@ const daoStacksStore = {
         })
       })
     },
-    deployContractWithPrivateKey ({ commit, state, dispatch, rootGetters }, data) {
+    deployContractWithPrivateKey ({ commit, state, dispatch }, data) {
       return new Promise((resolve, reject) => {
         const network = mocknet
         dispatch('daoAuthStore/fetchNoncesFor', data.senderAddress, { root: true }).then((nonces) => {
@@ -427,12 +422,13 @@ const daoStacksStore = {
         })
       })
     },
-    callApiDirect ({ dispatch }, txOptions) {
+    callApiDirect ({ commit }, txOptions) {
       return new Promise((resolve, reject) => {
         const url = (txOptions.path.indexOf('extended/v1') === -1) ? process.env.VUE_APP_STACKS_API : process.env.VUE_APP_STACKS_API_EXTENDED
         if (txOptions.httpMethod === 'GET') {
           axios.get(url + txOptions.path).then(response => {
             const result = response.data
+            commit('addResult', result)
             resolve(result)
           }).catch((error) => {
             reject(error)
