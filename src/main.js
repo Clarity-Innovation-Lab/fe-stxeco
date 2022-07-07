@@ -8,7 +8,7 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import '@/assets/scss/custom.scss'
-import VueMarkdown from 'vue-markdown'
+// import VueMarkdown from 'vue-markdown'
 
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue)
@@ -16,7 +16,7 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(Notifications, { closeOnClick: true, duration: 6000 })
 Vue.use(browserDetect)
-Vue.use(VueMarkdown)
+// Vue.use(VueMarkdown)
 
 Vue.config.productionTip = false
 

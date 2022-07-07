@@ -21,12 +21,12 @@
 
 <script>
 import { APP_CONSTANTS } from '@/app-constants'
-import VueMarkdown from 'vue-markdown'
+// import VueMarkdown from 'vue-markdown'
 
 export default {
   name: 'SIPProcess',
   components: {
-    VueMarkdown
+    // VueMarkdown
   },
   data: function () {
     return {

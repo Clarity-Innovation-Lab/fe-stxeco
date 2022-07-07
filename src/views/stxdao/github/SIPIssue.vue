@@ -94,13 +94,13 @@
 
 <script>
 import { APP_CONSTANTS } from '@/app-constants'
-import VueMarkdown from 'vue-markdown'
+// import VueMarkdown from 'vue-markdown'
 import { DateTime } from 'luxon'
 
 export default {
   name: 'SIPIssue',
   components: {
-    VueMarkdown
+    // VueMarkdown
   },
   data: function () {
     return {

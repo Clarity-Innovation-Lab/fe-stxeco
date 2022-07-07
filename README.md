@@ -88,6 +88,8 @@ npm run lint
 - Photo by Tingey Injury Law Firm on Unsplash - thinker
 - Photo by Michal Matlon on Unsplash - seats
 
+### References
+
 ## License
 
 MIT license, all good as long as the copyright and permission notice are included.

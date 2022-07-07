@@ -198,13 +198,13 @@
 
 <script>
 import { APP_CONSTANTS } from '@/app-constants'
-import VueMarkdown from 'vue-markdown'
+// import VueMarkdown from 'vue-markdown'
 import { DateTime } from 'luxon'
 
 export default {
   name: 'ProposalForm',
   components: {
-    VueMarkdown
+    // VueMarkdown
   },
   props: ['templateProposal'],
   data: function () {
@@ -218,34 +218,8 @@ export default {
       showErrors: false
     }
   },
-  computed: {
-    isValid () {
-      return this.getErrors().length === 0
-    },
-    created: function () {
-      return DateTime.now().toLocaleString({ weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })
-    },
-    proposalContractIdState () {
-      if (!this.formSubmitted && this.proposal.onChain) return null
-      return (this.proposal.contractId && this.proposal.contractId.length > 2)
-    },
-    proposalTitleState () {
-      if (!this.formSubmitted && !this.proposal.title) return null
-      return (this.proposal.title && this.proposal.title.length > 2)
-    },
-    proposalProposerState () {
-      if (!this.formSubmitted && !this.proposal.proposer) return null
-      return (this.proposal.proposer && this.proposal.proposer.length > 2)
-    },
-    profile () {
-      const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]
-      return profile
-    }
-  },
   mounted () {
     this.proposal = this.templateProposal
-  },
-  mounted () {
     this.loaded = true
   },
   methods: {
@@ -285,7 +259,31 @@ export default {
     canDelete () {
       return this.profile.stxAddress === this.proposal.proposer && this.proposal.status === 'draft'
     }
-  }
+  },
+  computed: {
+    isValid () {
+      return this.getErrors().length === 0
+    },
+    created: function () {
+      return DateTime.now().toLocaleString({ weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })
+    },
+    proposalContractIdState () {
+      if (!this.formSubmitted && this.proposal.onChain) return null
+      return (this.proposal.contractId && this.proposal.contractId.length > 2)
+    },
+    proposalTitleState () {
+      if (!this.formSubmitted && !this.proposal.title) return null
+      return (this.proposal.title && this.proposal.title.length > 2)
+    },
+    proposalProposerState () {
+      if (!this.formSubmitted && !this.proposal.proposer) return null
+      return (this.proposal.proposer && this.proposal.proposer.length > 2)
+    },
+    profile () {
+      const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]
+      return profile
+    }
+  },
 }
 </script>
 
