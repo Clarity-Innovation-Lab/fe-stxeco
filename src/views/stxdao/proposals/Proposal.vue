@@ -1,9 +1,19 @@
 <template>
 <section>
   <b-container class="my-5" v-if="proposal">
-    <h4>Proposal: <span class="text-warning">{{proposal.title}}</span></h4>
-    <p><b-link to="/stxdao/proposals"><b-icon icon="chevron-double-left"/>back</b-link></p>
-    <VotingBlockHeights :proposalData="proposal.proposalData" />
+    <div class="border-bottom pb-5 mb-5 w-100 d-flex justify-content-between text-small">
+      <h4>Proposal: <span class="">{{proposal.title}}</span></h4>
+      <p>
+        <b-link to="/stxdao/proposals"><b-icon icon="chevron-double-left"/>back</b-link>
+        <span class="ml-4 pointer text-right" @click="showPropData = !showPropData">show info</span>
+      </p>
+    </div>
+    <div v-if="showPropData">
+      <VotingProgress :proposal="proposal" class="text-small"/>
+    </div>
+    <div>
+      <BallotBox :proposal="proposal"  class="text-small" />
+    </div>
 
     <b-tabs card justified class="mt-5">
       <b-tab>
@@ -29,16 +39,19 @@
 <script>
 import { APP_CONSTANTS } from '@/app-constants'
 import ProposalMetaDisplay from './meta-data/ProposalMetaDisplay'
-import VotingBlockHeights from './meta-data/VotingBlockHeights'
+import VotingProgress from './voting/VotingProgress'
+import BallotBox from './voting/BallotBox'
 
 export default {
   name: 'Proposal',
   components: {
     ProposalMetaDisplay,
-    VotingBlockHeights
+    VotingProgress,
+    BallotBox
   },
   data () {
     return {
+      showPropData: false
     }
   },
   mounted () {

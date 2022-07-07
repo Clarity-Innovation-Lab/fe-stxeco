@@ -51,10 +51,7 @@ export default {
   },
   computed: {
     proposalEnds () {
-      const parameters = this.$store.getters[APP_CONSTANTS.KEY_GOV_PARAMETERS]
-      const param = parameters.find((o) => o.name === 'proposal-duration')
-      if (!param) return 0
-      return Number(this.proposal.proposalData['start-block-height'].value) + Number(param.value)
+      return this.$store.getters[APP_CONSTANTS.KEY_PROPOSAL_ENDS_AT_HEIGHT](this.proposal.contractId)
     },
     stacksTipHeight () {
       const blockchainInfo = this.$store.getters[APP_CONSTANTS.KEY_BLOCKCHAIN_INFO]

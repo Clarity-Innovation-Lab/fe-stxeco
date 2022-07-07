@@ -1,18 +1,6 @@
 <template>
 <div v-if="proposal">
-  <div class="mb-4">
-    <p>Proposals are made up of a contract plus meta data which describes the proposal</p>
-    <p>Before a proposal can be submitted to the DAO the proposal meta data must be stored in
-      IPFS or similar (immutable storage) and the proposal contract must be deployed on the
-      target blockchain.
-    </p>
-  </div>
 
-  <b-tabs card justified>
-    <b-tab active >
-      <template #title>
-        <span>Update Proposal</span>
-      </template>
       <div class="mb-1" role="group">
         <div class="mb-4">
           <b-button class="mr-3" :disabled="!isValid" @click.prevent="save()">Save Proposal</b-button>
@@ -114,16 +102,6 @@
           </b-col>
         </b-row>
       </div>
-    </b-tab>
-    <b-tab>
-      <template #title>
-        <span class="text-bold">Deploy Proposal</span>
-      </template>
-      <div>
-        <DeployProposalForm :proposal="proposal"/>
-      </div>
-    </b-tab>
-  </b-tabs>
 
 </div>
 </template>
@@ -132,13 +110,11 @@
 import { APP_CONSTANTS } from '@/app-constants'
 import VueMarkdown from 'vue-markdown'
 import { DateTime } from 'luxon'
-import DeployProposalForm from '@/views/stxdao/proposals/meta-data/DeployProposalForm'
 
 export default {
   name: 'ProposalForm',
   components: {
-    VueMarkdown,
-    DeployProposalForm
+    VueMarkdown
   },
   props: ['proposal'],
   data: function () {

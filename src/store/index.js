@@ -7,6 +7,7 @@ import daoStacksStore from './daoStacksStore'
 import daoProposalStore from './daoProposalStore'
 import daoGovernanceStore from './daoGovernanceStore'
 import daoExtensionStore from './daoExtensionStore'
+import daoSIPStore from './daoSIPStore'
 
 Vue.use(Vuex)
 
@@ -18,7 +19,8 @@ export default new Vuex.Store({
     daoStacksStore,
     daoProposalStore,
     daoGovernanceStore,
-    daoExtensionStore
+    daoExtensionStore,
+    daoSIPStore
   },
   state: {
     chromeLink: 'https://chrome.google.com/webstore/detail/stacks-wallet/ldinpeekobnhjjdofggfgjlcehhmanlj',
@@ -52,11 +54,12 @@ export default new Vuex.Store({
   actions: {
     initDaoApplication ({ dispatch }) {
       return new Promise((resolve) => {
+        dispatch('daoSIPStore/fetchIssues')
         dispatch('daoRatesStore/initialiseRates').then(() => {
           dispatch('daoAuthStore/fetchMyAccount').then((profile) => {
             dispatch('daoProposalStore/initialiseProposalMetaData', profile.stxAddress).then((results) => {
               dispatch('daoGovernanceStore/initialiseGovernanceData', profile.stxAddress)
-              dispatch('daoExtensionStore/initialiseExtensionContractData')
+              dispatch('daoExtensionStore/fetchExtensions')
               dispatch('daoProposalStore/initialiseProposalContractData')
               this.tick = setInterval(() => {
                 dispatch('daoProposalStore/fetchBlockchainInfo')

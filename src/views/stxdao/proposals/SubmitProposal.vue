@@ -66,7 +66,12 @@ export default {
     canSubmitProposal () {
       const proposal = this.proposal
       const canPropose = this.$store.getters[APP_CONSTANTS.KEY_GOV_CAN_PROPOSE]
-      return (proposal.status === 'deployed' && canPropose)
+      if (proposal.status === 'deployed' && canPropose) {
+        return true
+      } else if (proposal.status === 'submitted' && canPropose && !proposal.proposalData) {
+        return true
+      }
+      return false
     },
     submitProposal () {
       const proposal = this.proposal
@@ -104,9 +109,7 @@ export default {
       return param.value
     },
     stacksTipHeight () {
-      const blockchainInfo = this.$store.getters[APP_CONSTANTS.KEY_BLOCKCHAIN_INFO]
-      if (!blockchainInfo) return 0
-      return Number(blockchainInfo.stacks_tip_height)
+      return this.$store.getters[APP_CONSTANTS.KEY_PROPOSAL_STACKS_TIP_HEIGHT]
     },
     proposal () {
       const proposal = this.$store.getters[APP_CONSTANTS.KEY_PROPOSAL](this.$route.params.proposalId)
@@ -115,7 +118,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .sl-2 {
   position: relative;
   left: -20px

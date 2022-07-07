@@ -30,11 +30,11 @@ export default {
   computed: {
     votesFor () {
       const propData = this.proposal.proposalData
-      return (propData) ? propData['votes-for'].value : 0
+      return (propData) ? propData.votesFor : 0
     },
     votesAgainst () {
       const propData = this.proposal.proposalData
-      return (propData) ? propData['votes-against'].value : 0
+      return (propData) ? propData.votesAgainst : 0
     },
     profile () {
       const profile = this.$store.getters[APP_CONSTANTS.KEY_PROFILE]

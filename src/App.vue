@@ -1,7 +1,9 @@
 <template>
 <div id="app" :style="'z-index: -40; min-height: 90vh; background-size: contain; background-image: url(' + getPixelBackground + ')'">
   <div class="wrapper" v-if="loaded">
+    <div class="bg-danger py-3 text-center under-construction">UNDER CONSTRUCTION - <a href="https://discord.com/channels/621759717756370964/971037457661444156" target="_blank">contributions welcome via discord!</a></div>
     <RouterView name="header" class="bg-dark"/>
+    <RouterView name="daoheader" class="bg-warning text-white"/>
     <RouterView id="page" class="mt-5"/>
     <div class="push"></div>
   </div>

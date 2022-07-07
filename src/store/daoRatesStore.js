@@ -1,9 +1,9 @@
 import axios from 'axios'
-import SockJS from 'sockjs-client'
-import Stomp from '@stomp/stompjs'
+// import SockJS from 'sockjs-client'
+// import Stomp from '@stomp/stompjs'
 
-let socket = null
-let stompClient = null
+// let socket = null
+// let stompClient = null
 const currencyList = function (currency) {
   return currency === 'CNY' ||
           currency === 'GBP' ||
@@ -20,6 +20,7 @@ const configuration = {
   appDetails: appDetails,
   network: process.env.VUE_APP_NETWORK
 }
+/**
 const connectApiNews = function (commit) {
   if (!socket) socket = new SockJS(process.env.VUE_APP_CLARITYLAB_API + '/mesh/api-news')
   if (!stompClient) stompClient = Stomp.over(socket)
@@ -36,6 +37,7 @@ const connectApiNews = function (commit) {
   function () {
   })
 }
+**/
 
 const daoRatesStore = {
   namespaced: true,
@@ -78,7 +80,7 @@ const daoRatesStore = {
       return new Promise((resolve) => {
         try {
           axios.get(process.env.VUE_APP_CLARITYLAB_API + '/mesh/v1/rates/ticker').then(response => {
-            connectApiNews(commit)
+            // connectApiNews(commit)
             commit('setTickerRates', response.data)
             resolve(response.data)
           })

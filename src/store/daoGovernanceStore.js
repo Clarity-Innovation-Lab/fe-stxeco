@@ -84,6 +84,9 @@ const daoGovernanceStore = {
     getTokenBalance: state => {
       return state.tokenBalance
     },
+    getTokenBalanceSpendable: state => {
+      return state.tokenBalance - state.tokenBalanceLocked
+    },
     getTokenBalanceLocked: state => {
       return state.tokenBalanceLocked
     },
@@ -93,7 +96,12 @@ const daoGovernanceStore = {
     getProposeFactor: state => {
       const proposeFactor = state.parameters.find((o) => o.name === 'propose-factor')
       if (!proposeFactor) return false
-      return proposeFactor.value
+      return Number(proposeFactor.value)
+    },
+    getProposalDuration: state => {
+      const proposeFactor = state.parameters.find((o) => o.name === 'proposal-duration')
+      if (!proposeFactor) return 0
+      return Number(proposeFactor.value)
     },
     getParameters: state => {
       return state.parameters
@@ -135,7 +143,8 @@ const daoGovernanceStore = {
       fetchParameter(state, dispatch, commit, 'maximum-proposal-start-delay')
       fetchParameter(state, dispatch, commit, 'proposal-duration')
       fetchParameter(state, dispatch, commit, 'propose-factor').then(() => {
-        return initialiseUserBalance(state, dispatch, commit, stxAddress)
+        if (stxAddress) return initialiseUserBalance(state, dispatch, commit, stxAddress)
+        else return null
       })
     }
   }

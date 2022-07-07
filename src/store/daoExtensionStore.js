@@ -2,36 +2,12 @@ import {
   contractPrincipalCV,
   serializeCV
 } from '@stacks/transactions'
+import axios from 'axios'
 
-const getReadConfig = function (contractName, functionName, functionArgs) {
-  return {
-    contractAddress: process.env.VUE_APP_DAO_DEPLOY_ADDRESS,
-    contractName: contractName,
-    functionName: functionName,
-    functionArgs: functionArgs
-  }
-}
-
-const checkExtensionEnabled = function (state, dispatch, commit, contractName) {
-  return new Promise((resolve) => {
-    const contractCV = serializeCV(contractPrincipalCV(process.env.VUE_APP_DAO_DEPLOY_ADDRESS, contractName)).toString('hex')
-    const config = getReadConfig(state.executor, 'is-extension', [contractCV])
-    dispatch('daoStacksStore/callContractReadOnly', config, { root: true }).then((result) => {
-      const extension = state.extensions.find((o) => o.contractName === contractName)
-      if (result.value) commit('setConstructed', true)
-      extension.enabled = result.value
-      commit('setExtension', extension)
-      resolve(extension)
-    })
-  })
-}
-
-const initialiseExtensionContractData = function (state, dispatch, commit) {
-  return new Promise((resolve) => {
-    state.extensions.forEach((extension) => {
-      checkExtensionEnabled(state, dispatch, commit, extension.contractName)
-    })
-  })
+const configuration = {
+  network: process.env.VUE_APP_NETWORK,
+  clarityLabApi: process.env.VUE_APP_CLARITYLAB_API,
+  clarityLabStacksApi: process.env.VUE_APP_STACKS_API
 }
 
 const daoExtensionStore = {
@@ -58,17 +34,11 @@ const daoExtensionStore = {
     }
   },
   mutations: {
-    setExtensionTraitInterface (state, extensionTraitInterface) {
-      state.extensionTraitInterface = extensionTraitInterface
-    },
-    setConstructed (state, constructed) {
-      state.constructed = constructed
-    },
     setExtensions (state, extensions) {
       state.extensions = extensions
     },
     setExtension (state, extension) {
-      const index = state.extensions.findIndex((o) => o.contractName === extension.contractName)
+      const index = state.extensions.findIndex((o) => o.contractId === extension.contractId)
       if (index > -1) {
         state.extensions[index].contract = extension
       } else {
@@ -77,14 +47,15 @@ const daoExtensionStore = {
     }
   },
   actions: {
-    initialiseExtensionContractData ({ state, dispatch, commit }) {
-      state.extensions.push({ index: 0, contractName: 'ede000-governance-token' })
-      state.extensions.push({ index: 1, contractName: 'ede001-proposal-voting' })
-      state.extensions.push({ index: 2, contractName: 'ede002-proposal-submission' })
-      state.extensions.push({ index: 3, contractName: 'ede003-emergency-proposals' })
-      state.extensions.push({ index: 4, contractName: 'ede004-emergency-execute' })
-      state.extensions.push({ index: 5, contractName: 'ede005-dev-fund' })
-      return initialiseExtensionContractData(state, dispatch, commit)
+    fetchExtensions ({ commit }) {
+      return new Promise((resolve, reject) => {
+        axios.get(configuration.clarityLabApi + '/mesh/v2/extensions').then(response => {
+          commit('setExtensions', response.data)
+          resolve(response.data)
+        }).catch((error) => {
+          reject(error)
+        })
+      })
     }
   }
 }

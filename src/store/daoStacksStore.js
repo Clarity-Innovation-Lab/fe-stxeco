@@ -40,7 +40,7 @@ const daoStacksStore = {
     provider: 'connect',
     result: null,
     contracts: [],
-    appName: 'executor stx dao',
+    appName: 'EcosystemDAO',
     appLogo: '/img/logo.png'
   },
   getters: {
@@ -187,8 +187,12 @@ const daoStacksStore = {
           }
           axios.post(configuration.stacksApi + path, txOptions, { headers: headers }).then(response => {
             // data.result = utils.jsonFromTxResult(response.data.result)
-            const result = cvToJSON(deserializeCV(response.data.result))
-            resolve(result)
+            if (!response.data.okay) {
+              resolve()
+            } else {
+              const result = cvToJSON(deserializeCV(response.data.result))
+              resolve(result)
+            }
           }).catch((error) => {
             reject(error)
           })
@@ -362,6 +366,7 @@ const daoStacksStore = {
       return new Promise((resolve, reject) => {
         let network = mainnet
         if (configuration.network === 'testnet') network = testnet
+        if (configuration.network === 'local') network = mocknet
         const txOptions = {
           codeBody: datum.codeBody,
           contractName: datum.contractId.split('.')[1],
@@ -386,6 +391,9 @@ const daoStacksStore = {
     },
     makeTransferBlockstack ({ state }, data) {
       return new Promise((resolve, reject) => {
+        let network = mainnet
+        if (configuration.network === 'testnet') network = testnet
+        if (configuration.network === 'local') network = mocknet
         const amount = Math.round(data.amountStx * precision)
         // amount = parseInt(amount, 16)
         const amountBN = new BigNum(amount)
@@ -393,7 +401,7 @@ const daoStacksStore = {
           recipient: data.recipient,
           // network: network,
           amount: amountBN,
-          network: (configuration.network === 'mainnet') ? mainnet : testnet,
+          network: network,
           memo: 'Payment for credits',
           appDetails: {
             name: state.appName,
@@ -410,8 +418,8 @@ const daoStacksStore = {
     deployProjectContract ({ dispatch }, datum) {
       return new Promise((resolve, reject) => {
         if (!datum.fee) datum.fee = contractDeployFee
-        let methos = 'deployContractConnect'
-        if (configuration.network === 'local') methos = 'deployContractWithPrivateKey'
+        const methos = 'deployContractConnect'
+        // if (configuration.network === 'local') methos = 'deployContractWithPrivateKey'
         dispatch(methos, datum).then((result) => {
           resolve(result)
         }).catch((error) => {

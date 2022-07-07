@@ -3,7 +3,10 @@
   <b-container class="text-center">
     <b-row>
       <b-col md="6" sm="6" class="my-2">
-        <StxEcoDisplayCard :bgImage="bgImage2" :title="'Ecosystem DAO'" :subtitle="'A Contributors DAO on Stacks'" :path="'/stxdao/membership'" label="Memebrship" />
+        <StxEcoDisplayCard :bgImage="bgImage2" :title="'Ecosystem DAO'" :subtitle="'A Contributors DAO on Stacks'" :path="'/stxdao/membership'" label="Membership" />
+      </b-col>
+      <b-col md="6" sm="6" class="my-2">
+        <StxEcoDisplayCard :bgImage="bgImage2" :title="'Stacks Improvements'" :subtitle="'Contribute to the growth of the Stacks Network'" :path="'/stxdao/sip-landing'" label="SIP Process" />
       </b-col>
       <b-col md="6" sm="6" class="my-2">
         <StxEcoDisplayCard :bgImage="bgImage1" :title="'Make a Change'" :subtitle="'Submit a proposal'" :path="'/stxdao/proposals'" label="Proposals" />

@@ -15,9 +15,11 @@
           <template #cell(Status)="data">
             <b-link class="text-info pointer" v-b-tooltip.hover="{ variant: 'dark' }" :title="getStatusTip(data.value)">{{data.value}}</b-link>
           </template>
+          <!--
           <template #cell(Proposer)="data">
             <OwnerInfo :owner="data.value" />
           </template>
+          -->
           <template #cell(Actions)="data">
             <b-link v-if="canEditProposal(data)" class="mr-2 text-info" variant="warning" v-on:click="editProposal(data)"><span>update</span></b-link>
             <b-link v-else-if="!isSubmitted(data)" class="mr-2 text-info" variant="warning" v-on:click="editProposal(data)"><span>open</span></b-link>
@@ -39,14 +41,14 @@
 
 <script>
 import { APP_CONSTANTS } from '@/app-constants'
-import OwnerInfo from '@/components/OwnerInfo'
+// import OwnerInfo from '@/components/OwnerInfo'
 import ProposalFilters from './filter/ProposalFilters'
 import { DateTime } from 'luxon'
 
 export default {
   name: 'Proposals',
   components: {
-    OwnerInfo,
+    // OwnerInfo,
     ProposalFilters
   },
   data () {
@@ -66,8 +68,8 @@ export default {
       if (propData && propData.concluded.value) {
         if (propData.passed.value) return 'Proposal Passed'
         else return 'Proposal failed'
-      } else if (this.stacksTipHeight > propData['end-block-height'].value) return 'Voting ended'
-      else if (this.stacksTipHeight < propData['start-block-height'].value) return 'Starts in ' + (propData['start-block-height'].value - this.stacksTipHeight) + ' blocks.'
+      } else if (this.stacksTipHeight > propData.endBlockHeight) return 'Voting ended'
+      else if (this.stacksTipHeight < propData.startBlockHeight) return 'Starts in ' + (propData.startBlockHeight - this.stacksTipHeight) + ' blocks.'
       else return 'Cast your vote!'
     },
     getStatusTip (status) {
@@ -127,15 +129,7 @@ export default {
           sortable: true
         },
         {
-          key: 'Proposer',
-          sortable: true
-        },
-        {
           key: 'Status',
-          sortable: true
-        },
-        {
-          key: 'Date',
           sortable: true
         },
         {
@@ -150,13 +144,16 @@ export default {
       mapped = this.proposals.map(function (proposal) {
         return {
           Proposal: proposal.title,
-          Proposer: proposal.proposer,
+          // Proposer: proposal.proposer,
           Status: proposal.status,
-          Date: DateTime.fromMillis(proposal.created).toLocaleString({ weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
+          // Date: $self.fromMillis(proposal.createdAT),
           Actions: $self.canEdit(proposal)
         }
       })
       return mapped
+    },
+    fromMillis (date) {
+      return (date) ? DateTime.fromMillis(date).toLocaleString({ weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' }) : ''
     },
     next () {
       return true
@@ -178,9 +175,7 @@ export default {
       return profile
     },
     stacksTipHeight () {
-      const blockchainInfo = this.$store.getters[APP_CONSTANTS.KEY_BLOCKCHAIN_INFO]
-      if (!blockchainInfo) return 0
-      return Number(blockchainInfo.stacks_tip_height)
+      return this.$store.getters[APP_CONSTANTS.KEY_PROPOSAL_STACKS_TIP_HEIGHT]
     }
   }
 }

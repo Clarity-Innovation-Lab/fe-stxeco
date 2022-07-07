@@ -1,56 +1,11 @@
 <template>
-<b-container fluid>
-  <b-navbar toggleable="md" variant="transparent" class="">
-    <b-navbar-brand href="#">
-      <div class="tagline"><b-link to="/"><img class="mr-30" width="30px" :src="iconGrey"/> e<span class="tagline1">DAO</span></b-link></div>
-    </b-navbar-brand>
-
-    <!-- <ExchangeRates class="ml-auto nav-text d-block d-md-none"/> -->
-
-    <b-navbar-toggle class="" target="nav-collapse">
-      <template v-slot:default="{ expanded }">
-        <b-icon width="20px" height="30px" v-if="expanded" icon="chevron-contract"></b-icon>
-        <img width="20px" v-else :src="toggler"/>
-      </template>
-    </b-navbar-toggle>
-
+<b-container fluid class="py-0 my-0">
+  <b-navbar variant="" class="py-0 my-0 text-small">
     <b-collapse id="nav-collapse" is-nav>
-      <b-navbar class="ml-auto">
-        <b-nav-item to="/stxdao/sip-landing" class="nav-text">SIP</b-nav-item>
-        <b-nav-item to="/stxdao/proposals" class="nav-text">DAO</b-nav-item>
-        <!-- <exchange-rates class="pl-0 nav-text"/> -->
-        <b-nav-item-dropdown class="nav-text" right v-if="profile.loggedIn" caret>
-          <template v-slot:button-content>
-            <img :src="walletGrey" class="pointer icon"/>
-          </template>
-          <b-dropdown-item>{{bnsName}}</b-dropdown-item>
-          <b-dropdown-divider />
-          <b-dropdown-item v-if="profile.accountInfo" class="text-right text-small">
-            <span>Balance: {{accountInfo.balance}} STX</span>
-          </b-dropdown-item>
-          <b-dropdown-item to="/stxdao/sip-landing">
-            <span>SIPs</span>
-          </b-dropdown-item>
-          <b-dropdown-item to="/stxdao/proposals">
-            <span>Proposals</span>
-          </b-dropdown-item>
-          <b-dropdown-item>
-            <span @click="startLogin()">Switch Account</span>
-          </b-dropdown-item>
-          <b-dropdown-item>
-            <span @click="startLogout()">Logout</span>
-          </b-dropdown-item>
-          <b-dropdown-divider />
-          <!--
-          <b-dropdown-item>
-            <h6>Governance Token</h6>
-            <b-row><b-col cols="4">Unlocked</b-col><b-col cols="8">{{getTokenBalance}}</b-col></b-row>
-            <b-row><b-col cols="4">Locked</b-col><b-col cols="8">{{getTokenBalanceLocked}}</b-col></b-row>
-            <b-row><b-col cols="4">Delegated</b-col><b-col cols="8">{{getTotalDelegatedToMe}}</b-col></b-row>
-          </b-dropdown-item>
-        -->
-        </b-nav-item-dropdown>
-        <b-nav-item class="nav-text" v-else><span @click="startLogin()">Connect Wallet</span></b-nav-item>
+      <b-navbar class="mx-auto my-0 py-0 text-white">
+        <b-nav-item to="/stxdao/extensions" class="my-0 py-0 mr-3 pr-3 border-right">Extensions</b-nav-item>
+        <b-nav-item to="/stxdao/proposals" class="my-0 py-0 mr-3 pr-3 border-right">Proposals</b-nav-item>
+        <b-nav-item to="/stxdao/membership" class="my-0 py-0">Membership</b-nav-item>
       </b-navbar>
     </b-collapse>
   </b-navbar>
@@ -61,7 +16,7 @@
 import { APP_CONSTANTS } from '@/app-constants'
 
 export default {
-  name: 'MainNavbar',
+  name: 'SecondNavbar',
   props: {
     transparent: Boolean,
     colorOnScroll: Number
@@ -70,7 +25,6 @@ export default {
   },
   data () {
     return {
-      walletGrey: require('@/assets/img/EAG - WEB UX assets - png/EAG - wallet grey.png'),
       iconSN: require('@/assets/img/EAG - WEB UX assets - png/EAG - stacks neon.png'),
       iconGrey: require('@/assets/img/EAG - WEB UX assets - png/EAG - stacks grey.png'),
       toggler: require('@/assets/img/logo.png')

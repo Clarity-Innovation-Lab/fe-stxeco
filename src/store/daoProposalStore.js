@@ -1,9 +1,12 @@
 import axios from 'axios'
 import {
   uintCV,
+  trueCV,
+  falseCV,
   contractPrincipalCV
 } from '@stacks/transactions'
 import { DateTime } from 'luxon'
+import { APP_CONSTANTS } from '@/app-constants'
 
 const configuration = {
   network: process.env.VUE_APP_NETWORK,
@@ -85,6 +88,26 @@ const daoProposalStore = {
     },
     getBlockchainInfo: state => {
       return state.blockchainInfo
+    },
+    getStacksTipHeight: state => {
+      const blockchainInfo = state.blockchainInfo
+      if (!blockchainInfo) return 0
+      return Number(blockchainInfo.stacks_tip_height)
+    },
+    getProposalEndsHeight: (state, getters, rootState, rootGetters) => contractId => {
+      const proposalDuration = rootGetters[APP_CONSTANTS.KEY_GOV_PROPOSAL_DURATION]
+      if (!proposalDuration) return 0
+      const prop = state.proposals.find((p) => p.contractId === contractId)
+      return Number(prop.proposalData.startBlockHeight) + proposalDuration
+    },
+    getVotingInProgress: state => contractId => {
+      const blockchainInfo = state.blockchainInfo
+      let stacksTipHeight = 0
+      if (blockchainInfo) {
+        stacksTipHeight = Number(blockchainInfo.stacks_tip_height)
+      }
+      const prop = state.proposals.find((p) => p.contractId === contractId)
+      return stacksTipHeight >= prop.proposalData.startBlockHeight && stacksTipHeight < prop.proposalData.endBlockHeight
     },
     getProposalTraitInterface: state => {
       return state.proposalTraitInterface
@@ -175,8 +198,8 @@ const daoProposalStore = {
           postConditions: [],
           contractAddress: process.env.VUE_APP_DAO_DEPLOY_ADDRESS,
           contractName: 'ede002-proposal-submission',
-          senderAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
-          senderKey: '753b7cc01a1a2e86221266a154af739463fce51219d97e4f856cd7200c3bd2a601',
+          // senderAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+          // senderKey: '753b7cc01a1a2e86221266a154af739463fce51219d97e4f856cd7200c3bd2a601',
           functionName: 'propose',
           functionArgs: [proposalCV, startHeight, governanceCV]
         }
@@ -203,8 +226,8 @@ const daoProposalStore = {
           postConditions: [],
           contractAddress: contractId.split('.')[0],
           contractName: 'executor-dao',
-          senderAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
-          senderKey: '753b7cc01a1a2e86221266a154af739463fce51219d97e4f856cd7200c3bd2a601',
+          // senderAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+          // senderKey: '753b7cc01a1a2e86221266a154af739463fce51219d97e4f856cd7200c3bd2a601',
           functionName: 'construct',
           functionArgs: [contractPrincipalCV(contractId.split('.')[0], contractId.split('.')[1])]
         }
@@ -252,11 +275,59 @@ const daoProposalStore = {
         })
       })
     },
+    fetchProposalFromChain ({ dispatch }, contractId) {
+      return new Promise((resolve, reject) => {
+        axios.get(configuration.clarityLabApi + '/mesh/v2/process-proposal-data/' + contractId).then(response => {
+          dispatch('fetchProposal', contractId).then((props) => {
+            resolve(props)
+          })
+        }).catch((error) => {
+          reject(error)
+        })
+      })
+    },
+    fetchProposal ({ commit }, contractId) {
+      return new Promise((resolve, reject) => {
+        axios.get(configuration.clarityLabApi + '/mesh/v2/proposal/' + contractId).then(response => {
+          commit('setProposal', response.data)
+          resolve(response.data)
+        }).catch((error) => {
+          reject(error)
+        })
+      })
+    },
     fetchProposals ({ commit }) {
       return new Promise((resolve, reject) => {
         axios.get(configuration.clarityLabApi + '/mesh/v2/proposals').then(response => {
           commit('setProposals', response.data)
           resolve(response.data)
+        }).catch((error) => {
+          reject(error)
+        })
+      })
+    },
+    castVote ({ dispatch }, vote) {
+      return new Promise((resolve, reject) => {
+        let forCV = trueCV()
+        if (!vote.vfor) {
+          forCV = falseCV()
+        }
+        const amountCV = uintCV(vote.amount)
+        const governanceCV = contractPrincipalCV(process.env.VUE_APP_DAO_DEPLOY_ADDRESS, 'ede000-governance-token')
+        const proposalCV = contractPrincipalCV(vote.proposalContractId.split('.')[0], vote.proposalContractId.split('.')[1])
+        const callData = {
+          postConditions: [],
+          contractAddress: process.env.VUE_APP_DAO_DEPLOY_ADDRESS,
+          contractName: 'ede002-proposal-voting',
+          functionName: 'vote',
+          functionArgs: [amountCV, forCV, proposalCV, governanceCV]
+        }
+        const methos = 'daoStacksStore/callContractBlockstack'
+        // if (process.env.VUE_APP_NETWORK === 'local') {
+        // methos = 'daoStacksStore/callContractWithPrivateKey'
+        // }
+        dispatch(methos, callData, { root: true }).then((result) => {
+          resolve(result)
         }).catch((error) => {
           reject(error)
         })

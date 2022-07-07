@@ -3,9 +3,7 @@
     <b-form>
         <div>
           <div v-if="!uploadable">
-            <b-container class="p-5 ">
               <MediaUpload class="text-center" :hideLinkPaste="hideLinkPaste" :myUploadId="'coverImage'" :dims="dims" :contentModel="contentModel" :mediaFiles="mediaFilesImage()" :limit="1" :sizeLimit="3" :mediaTypes="'code/clar'" @updateMedia="updateMedia($event)"/>
-            </b-container>
           </div>
           <div v-else>
             <div class="mb-3" role="group">
@@ -76,7 +74,7 @@ export default {
       result: null,
       dims: { width: 'auto', height: 300 },
       contentModel: {
-        title: 'Browse computer for proposal contract <br/>It must implement <b>proposal-trait</b>',
+        title: 'Browse computer for proposal <br/>Note: it must implement <b>proposal-trait</b>',
         errorMessage: 'A file is required.',
         popoverBody: 'Your clarity  file.',
         buttonName: 'Choose Clarity File'
@@ -141,8 +139,9 @@ export default {
         codeBody: this.plainFile(),
         contractId: this.fileName
       }
-      this.$store.dispatch('daoStacksStore/deployProjectContract', deployData).then(() => {
+      this.$store.dispatch('daoStacksStore/deployProjectContract', deployData).then((result) => {
         this.$notify({ type: 'success', title: 'Contract Deploy', text: 'Sent the transaction.' })
+        this.$emit('proposal-contract', { opcode: 'deployed', result: result })
       }).catch((error) => {
         this.result = error
         this.$bvModal.show('modal-err')

@@ -25,9 +25,11 @@ export const APP_CONSTANTS = {
 
   KEY_GOV_TOKEN_BALANCE_DELEGATED: 'daoGovernanceStore/getTotalDelegatedToMe',
   KEY_GOV_TOKEN_BALANCE: 'daoGovernanceStore/getTokenBalance',
+  KEY_GOV_TOKEN_BALANCE_SPENDABLE: 'getTokenBalanceSpendable',
   KEY_GOV_TOKEN_BALANCE_LOCKED: 'daoGovernanceStore/getTokenBalanceLocked',
   KEY_GOV_TOKEN_SUPPLY: 'daoGovernanceStore/getTotalSupply',
   KEY_GOV_PROPOSE_FACTOR: 'daoGovernanceStore/getProposeFactor',
+  KEY_GOV_PROPOSAL_DURATION: 'daoGovernanceStore/getProposalDuration',
   KEY_GOV_PARAMETERS: 'daoGovernanceStore/getParameters',
   KEY_GOV_CAN_PROPOSE: 'daoGovernanceStore/getCanPropose',
 
@@ -39,5 +41,12 @@ export const APP_CONSTANTS = {
   KEY_VALID_PROPOSAL: 'daoProposalStore/isValidProposal',
   KEY_PROPOSALS: 'daoProposalStore/getProposals',
   KEY_PROPOSAL: 'daoProposalStore/getProposal',
-  KEY_PROPOSAL_TRAIT_INTERFACE: 'daoProposalStore/getProposalTraitInterface'
+  KEY_PROPOSAL_TRAIT_INTERFACE: 'daoProposalStore/getProposalTraitInterface',
+  KEY_PROPOSAL_VOTING_IN_PROGRESS: 'daoProposalStore/getVotingInProgress',
+  KEY_PROPOSAL_STACKS_TIP_HEIGHT: 'daoProposalStore/getStacksTipHeight',
+  KEY_PROPOSAL_ENDS_AT_HEIGHT: 'daoProposalStore/getProposalEndsHeight',
+
+  KEY_SIP_ISSUES: 'daoSIPStore/getIssues',
+  KEY_SIP_ISSUE: 'daoSIPStore/getIssue',
+  KEY_SIP_README: 'daoSIPStore/getReadme'
 }

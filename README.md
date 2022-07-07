@@ -2,7 +2,7 @@
 
 The UI for the Ecosystem DAO, a DAO for the Stacks community for decision making processes.
 
-For information about the Clarity Project, see [EcosystemDAO](https://github.com/Clarity-Innovation-Lab/ecosystem-dao).
+For information about the Project, see [EcosystemDAO](https://github.com/Clarity-Innovation-Lab/ecosystem-dao).
 
 ## D-App
 
@@ -42,9 +42,25 @@ Bootstrap, launch and run dao's using Executor DAO from the Clarity Lab.
 
 ## Project setup
 
+```
+% node -v 
+v16.14.2
+```
+
+```
+% npm -v 
+8.5.0
+```
+
 ```js
 npm install
 ```
+
+Note the project depends on node-sass@6 and may require rebuild of node-sass module. See (npm/sass compatibility)[https://www.npmjs.com/package/node-sass]
+
+
+(stack overflow explanation)[https://stackoverflow.com/questions/53125291/build-fails-npm-rebuild-node-sass-force]
+
 
 ### Compiles and hot-reloads for development
 
@@ -64,7 +80,7 @@ npm run build
 npm run lint
 ```
 
-### References
+### Acknowledgements
 
 - Photo by Mick Haupt on Unsplash - membership
 - Photo by Element5 Digital on Unsplash vote
