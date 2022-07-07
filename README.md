@@ -17,9 +17,29 @@ v16.14.2
 npm install
 ```
 
-Note the project depends on node-sass@6 and may require rebuild of node-sass module. See (npm/sass compatibility)[https://www.npmjs.com/package/node-sass]
+#### Stale Dependency Issues
+
+There are deprecated dependency version warnings on npm install.
+These will be addressed in future release but running `npm audit fix --force` fixes the nested dependency deprecation warnings but
+causes fatal build errors.
+
+#### Node Sass Dependency Issue
+
+The project depends on node-sass@6 and may require rebuild of node-sass module. See (npm/sass compatibility)[https://www.npmjs.com/package/node-sass]
 
 See also - (stack overflow explanation)[https://stackoverflow.com/questions/53125291/build-fails-npm-rebuild-node-sass-force]
+
+#### Pyhthon Quit Unexpectedly Issue
+
+While running `npm install` on mac (12.1 Monterey) a popup appear saying
+
+```
+Python quit unexpectedly.
+```
+
+The project continues to install and npm build/serve commands run.
+
+- See (stack overflow explanation)[https://stackoverflow.com/questions/40732280/python-quit-unexpectedly-on-mac] for an explanation.
 
 
 ### Compiles and hot-reloads for development
