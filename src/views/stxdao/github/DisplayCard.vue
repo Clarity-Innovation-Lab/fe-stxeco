@@ -69,7 +69,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .sip-card {
   background: #8ea998;
   min-height: 400px;

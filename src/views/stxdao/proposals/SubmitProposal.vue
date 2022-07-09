@@ -156,7 +156,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .sl-2 {
   position: relative;
   left: -20px
@@ -165,9 +165,4 @@ export default {
   position: relative;
   right: -20px
 }
-$themeColor: #dae0e6;
-
-/* import theme style */
-@import '~vue-slider-component/lib/theme/default.scss';
-
 </style>

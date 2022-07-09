@@ -7,7 +7,7 @@ import browserDetect from 'vue-browser-detect-plugin'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-// import '@/assets/scss/custom.css'
+import '@/assets/scss/custom.scss'
 // import VueMarkdown from 'vue-markdown'
 
 // Make BootstrapVue available throughout your project

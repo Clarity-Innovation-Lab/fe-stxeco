@@ -126,9 +126,4 @@ export default {
 }
 </script>
 <style lang="scss">
-$themeColor: #dae0e6;
-
-/* import theme style */
-@import '~vue-slider-component/lib/theme/default.scss';
-
 </style>

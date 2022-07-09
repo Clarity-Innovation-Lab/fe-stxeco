@@ -214,7 +214,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .create-container {
   width: 200px;
   height: 200px;

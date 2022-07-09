@@ -192,7 +192,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style>
 .footer-break-line {
   height: 10px;
 }

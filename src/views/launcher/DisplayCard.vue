@@ -69,7 +69,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .text2 {
   text-transform: capitalize;
 }
