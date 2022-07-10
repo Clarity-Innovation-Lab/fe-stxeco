@@ -63,7 +63,7 @@
             caret
           >
             <template #button-content>
-              <img
+              <img width="40px"
                 :src="walletGrey"
                 class="pointer icon"
               >

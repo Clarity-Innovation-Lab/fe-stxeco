@@ -257,7 +257,7 @@ const daoAuthStore = {
     },
     fetchAccountInfo ({ state, commit }, data) {
       return new Promise((resolve) => {
-        if (!data || !data.stxAddress) {
+        if (!data || !data.stxAddress || !state.accountApi) {
           resolve()
           return
         }

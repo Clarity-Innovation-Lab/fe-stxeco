@@ -44,7 +44,7 @@ Some build / dependency issues compounded and caused some problems which this br
 Node sass requires node-gyp and ultimately Python 2.7 to be reachable on the target machine. This causes
 several hard to diagnose problems during npm install including popoups saying python has unexpectedly
 quit and very verbose output to terminal. The behaviour on different environments - e.g. running in linux
-complicates things even further. 
+complicates things even further.
 
 Node-sass has been removed in favour of using plain css until a better solution is found
 
