@@ -120,7 +120,7 @@ const daoStore = {
       { type: 'core', strapline: 'One DAO to bind them all', name: 'executor-dao', githubPath: '/contracts/executor-dao.clar' },
       { type: 'extension', strapline: 'Governance token extension', name: 'ede000-governance-token', githubPath: '/contracts/extensions/ede000-governance-token.clar' },
       { type: 'extension', strapline: 'Proposal voting extension', name: 'ede001-proposal-voting', githubPath: '/contracts/extensions/ede001-proposal-voting.clar' },
-      { type: 'extension', strapline: 'Proposal submission extension', name: 'ede002-proposal-submission', githubPath: '/contracts/extensions/ede002-proposal-submission.clar' },
+      { type: 'extension', strapline: 'Proposal submission extension', name: 'ede002-threshold-proposal-submission', githubPath: '/contracts/extensions/ede002-threshold-proposal-submission.clar' },
       { type: 'extension', strapline: 'Emergency proposal extension', name: 'ede003-emergency-proposals', githubPath: '/contracts/extensions/ede003-emergency-proposals.clar' },
       { type: 'extension', strapline: 'Emergency execution extension', name: 'ede004-emergency-execute', githubPath: '/contracts/extensions/ede004-emergency-execute.clar' },
       { type: 'extension', strapline: 'Dev fund extension', name: 'ede005-dev-fund', githubPath: '/contracts/extensions/ede005-dev-fund.clar' },

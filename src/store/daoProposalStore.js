@@ -194,7 +194,7 @@ const daoProposalStore = {
         const callData = {
           postConditions: [],
           contractAddress: process.env.VUE_APP_DAO_DEPLOY_ADDRESS,
-          contractName: 'ede002-proposal-submission',
+          contractName: 'ede002-threshold-proposal-submission',
           // senderAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
           // senderKey: '753b7cc01a1a2e86221266a154af739463fce51219d97e4f856cd7200c3bd2a601',
           functionName: 'propose',
