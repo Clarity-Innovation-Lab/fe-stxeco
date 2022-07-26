@@ -63,7 +63,7 @@
             caret
           >
             <template #button-content>
-              <img
+              <img width="40px"
                 :src="walletGrey"
                 class="pointer icon"
               >
@@ -235,7 +235,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style>
 .play-mode {
   border-top: 0pt solid yellow;
   border-bottom: 1pt solid yellow;

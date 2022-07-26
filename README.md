@@ -17,31 +17,6 @@ v16.14.2
 npm install
 ```
 
-#### Stale Dependency Issues
-
-There are deprecated dependency version warnings on npm install.
-These will be addressed in future release but running `npm audit fix --force` fixes the nested dependency deprecation warnings but
-causes fatal build errors.
-
-#### Node Sass Dependency Issue
-
-The project depends on node-sass@6 and may require rebuild of node-sass module. See (npm/sass compatibility)[https://www.npmjs.com/package/node-sass]
-
-See also - (stack overflow explanation)[https://stackoverflow.com/questions/53125291/build-fails-npm-rebuild-node-sass-force]
-
-#### Pyhthon Quit Unexpectedly Issue
-
-While running `npm install` on mac (12.1 Monterey) a popup appear saying
-
-```
-Python quit unexpectedly.
-```
-
-The project continues to install and npm build/serve commands run.
-
-- See (stack overflow explanation)[https://stackoverflow.com/questions/40732280/python-quit-unexpectedly-on-mac] for an explanation.
-
-
 ### Compiles and hot-reloads for development
 
 ```js
@@ -59,6 +34,31 @@ npm run build
 ```js
 npm run lint
 ```
+
+## Dependency Issues
+
+Some build / dependency issues compounded and caused some problems which this branch addresses.
+
+### Node Sass
+
+Node sass requires node-gyp and ultimately Python 2.7 to be reachable on the target machine. This causes
+several hard to diagnose problems during npm install including popoups saying python has unexpectedly
+quit and very verbose output to terminal. The behaviour on different environments - e.g. running in linux
+complicates things even further.
+
+Node-sass has been removed in favour of using plain css until a better solution is found
+
+## Webpack 5 and Buffer Polyfills
+
+Attempts to fix the above triggered this issue. Buffer polyfills are supported natively when
+using webpack 4 but switching to webpack 5 means the polyfills have to be supplied via the config
+in this case vue.config.cli.
+
+- [How to polyfill Buffer with Webpack 5
+](https://viglucci.io/how-to-polyfill-buffer-with-webpack-5)
+- [Working with Webpack](https://cli.vuejs.org/guide/webpack.html#chaining-advanced)
+- [Uncaught ReferenceError: Buffer is not defined](https://stackoverflow.com/questions/68707553/uncaught-referenceerror-buffer-is-not-defined)
+- [How to Polyfill node core modules in webpack 5](https://stackoverflow.com/questions/64557638/how-to-polyfill-node-core-modules-in-webpack-5)
 
 ## D-App
 

@@ -70,7 +70,7 @@ const daoGovernanceStore = {
   state: {
     parameters: [],
     governanceTokenContract: 'ede000-governance-token',
-    proposalSubmissionContract: 'ede002-proposal-submission',
+    proposalSubmissionContract: 'ede002-threshold-proposal-submission',
     tokenBalance: 0,
     tokenBalanceLocked: 0,
     totalDelegatedToMe: 0,
